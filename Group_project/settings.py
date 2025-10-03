@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'movies',
+    'actors',
+    'directors',
     
 ]
 
@@ -82,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rateup',
         'USER': 'root',
-        'PASSWORD':'Speed-123',
+        'PASSWORD':'190275@11Jqq',
         'HOST':'127.0.0.1',
         'PORT':'3306'
     }

@@ -1,0 +1,237 @@
+/* ================================
+    RateUp Global Theme
+   ================================ */
+
+/* Root Variables */
+:root {
+    --primary-color: #28D7D7;
+    /* Aqua */
+    --secondary-color: #FFD93B;
+    /* Yellow */
+    --dark-bg: #0D0D0D;
+    /* Main background */
+    --card-bg: #1C1C1C;
+    /* Card background */
+    --light-text: #FFFFFF;
+    --muted-text: #BFBFBF;
+}
+
+/* Reset overrides */
+body {
+    background-color: var(--dark-bg) !important;
+    color: var(--light-text) !important;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* ================================
+   Navbar
+   ================================ */
+.navbar {
+    background-color: var(--card-bg) !important;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.navbar-brand {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--secondary-color) !important;
+}
+
+.navbar-brand:hover {
+    color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: var(--primary-color) !important;
+    transition: 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--secondary-color) !important;
+}
+
+/* ================================
+   Search Bar
+   ================================ */
+.search-form input {
+    background-color: var(--card-bg);
+    border: 1px solid var(--muted-text);
+    color: var(--light-text);
+}
+
+.search-form input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+.search-form button {
+    background-color: var(--secondary-color);
+    border: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.search-form button:hover {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+/* ================================
+   Hero Carousel
+   ================================ */
+.carousel-item img {
+    max-height: 500px;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+.carousel-caption {
+    bottom: 20%;
+}
+
+.carousel-caption h2 {
+    color: var(--secondary-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    font-size: 1.2rem;
+    color: var(--light-text);
+}
+
+.carousel-caption .btn {
+    margin-top: 10px;
+}
+
+/* ================================
+   Cards (Movies, Actors, Directors)
+   ================================ */
+.card {
+    background-color: var(--card-bg) !important;
+    color: var(--light-text) !important;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 20px rgba(40, 215, 215, 0.2);
+}
+
+.card-title {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.card-text small {
+    color: var(--muted-text);
+}
+
+/* Actor/Director images rounded */
+.card img.rounded-circle {
+    border: 2px solid var(--secondary-color);
+    object-fit: cover;
+    height: 150px;
+    width: 150px;
+    margin: 0 auto;
+}
+
+/* ================================
+   Buttons
+   ================================ */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    color: var(--dark-bg);
+}
+
+.btn-warning {
+    background-color: var(--secondary-color) !important;
+    color: var(--dark-bg) !important;
+    font-weight: bold;
+}
+
+.btn-warning:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--light-text) !important;
+}
+
+.btn-outline-info {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-info:hover {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+/* ================================
+   Section Titles
+   ================================ */
+h2,
+h3,
+h4 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.text-warning {
+    color: var(--secondary-color) !important;
+}
+
+.text-info {
+    color: var(--primary-color) !important;
+}
+
+/* ================================
+   Footer
+   ================================ */
+.footer {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-top: 2px solid var(--secondary-color);
+    margin-top: 50px;
+}
+
+.footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin: 0 8px;
+}
+
+.footer a:hover {
+    color: var(--secondary-color);
+}
+
+/* ================================
+   Utility
+   ================================ */
+.container {
+    max-width: 1200px;
+}
+
+.messages .alert {
+    background-color: var(--primary-color);
+    color: var(--dark-bg);
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}

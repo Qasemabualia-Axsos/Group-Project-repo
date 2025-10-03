@@ -6,9 +6,9 @@ from accounts.models import *
 def dashboard(request):
     if 'userid' not in request.session:
         return redirect('login_page')
-    movie=Movies.objects.all()
-    actor=Actors.objects.all()
-    director=Directors.objects.all()
+    movie=Movie.objects.all()
+    actor=Actor.objects.all()
+    director=Director.objects.all()
     data={
         'Movies':movie,
         'Actors':actor,
@@ -26,7 +26,7 @@ def view_movie(request,movie_id):
         return redirect('accounts:login_page')
 
     # Filter and get the first matching movie (or None)
-    movie = Movies.objects.filter(id=movie_id).first()
+    movie = Movie.objects.filter(id=movie_id).first()
     if not movie:
         return HttpResponse("Movie not found", status=404)
 

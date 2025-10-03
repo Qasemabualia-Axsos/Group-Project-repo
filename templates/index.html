@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Hero Banner -->
+<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        {% for movie in featured_movies %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ movie.banner.url }}" class="d-block w-100" alt="{{ movie.title }}">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded">
+                <h2 class="text-warning">{{ movie.title }}</h2>
+                <p>{{ movie.description|truncatechars:120 }}</p>
+                <a href="/movies/{{ movie.id }}/" class="btn btn-info">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+<!-- Featured Movies -->
+<section class="mb-5">
+    <h2 class="text-warning mb-3">Featured Movies</h2>
+    <div class="row g-4">
+        {% for movie in featured_movies %}
+        <div class="col-6 col-md-3">
+            <div class="card bg-dark border-info h-100">
+                <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+                <div class="card-body">
+                    <h5 class="card-title text-info">{{ movie.title }}</h5>
+                    <p class="card-text"><small class="text-secondary">{{ movie.release_year }}</small></p>
+                    <a href="/movies/{{ movie.id }}/" class="btn btn-warning btn-sm">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Top Actors -->
+<section class="mb-5">
+    <h2 class="text-warning mb-3">Top Actors</h2>
+    <div class="row g-3">
+        {% for actor in top_actors %}
+        <div class="col-6 col-md-2">
+            <div class="card bg-dark border-info text-center h-100">
+                <img src="{{ actor.profile_img.url }}" class="card-img-top rounded-circle p-2" alt="{{ actor.name }}">
+                <div class="card-body">
+                    <h6 class="card-title text-info">{{ actor.name }}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Top Directors -->
+<section class="mb-5">
+    <h2 class="text-warning mb-3">Top Directors</h2>
+    <div class="row g-3">
+        {% for director in top_directors %}
+        <div class="col-6 col-md-2">
+            <div class="card bg-dark border-warning text-center h-100">
+                <img src="{{ director.profile_img.url }}" class="card-img-top rounded-circle p-2"
+                    alt="{{ director.name }}">
+                <div class="card-body">
+                    <h6 class="card-title text-warning">{{ director.name }}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
