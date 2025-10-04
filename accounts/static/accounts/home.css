@@ -5,7 +5,80 @@
 #moviesCarousel{
     width: 70%;
     margin:60px auto;
+    box-shadow: 10px 10px 10px  white;
 }
 body{
      background-color: #0B2343;
 }
+
+.navbar {
+  background-color: #4C585B !important;
+  border-radius: 50px;
+  padding: 0.8rem 2rem;
+  margin: 20px auto;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.navbar a {
+  color: #ffffff !important;         
+  font-weight: 500;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #00CFFF !important;           
+}
+
+.navbar .btn {
+  background-color: white;           
+  color: black !important;           
+  border-radius: 20px;
+  padding: 6px 16px;
+  transition: all 0.3s ease;
+}
+
+.navbar .btn:hover {
+  background-color: #00A3CC;           
+  transform: scale(1.05);
+}
+.top-rated h2 {
+  color: #00CFFF;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(0, 207, 255, 0.4);
+}
+
+.movie-card {
+  background-color: #1C3144;
+  border-radius: 20px;
+  overflow: hidden;
+  text-align: center;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 250px; /* consistent height */
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.movie-card h5 {
+  color: #FFFFFF;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.movie-card p {
+  color: #FFD700;
+  margin: 5px 0;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 207, 255, 0.3);
+}
+

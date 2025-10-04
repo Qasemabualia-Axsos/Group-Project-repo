@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import *
 from accounts.models import *
+from django.http import JsonResponse
+
 # Create your views here.
 
 def dashboard(request):
@@ -39,3 +41,15 @@ def view_movie(request,movie_id):
         'directors': directors
     }
     return render (request,'movie.html',data)
+
+def ajax_search_movies(request):
+    query = request.GET.get('q', '')
+    movies = Movies.objects.filter(title__icontains=query) if query else []
+    results = []
+    for movie in movies:
+        results.append({
+            'id': movie.id,
+            'title': movie.title,
+            'cover': movie.cover_img.url,
+        })
+    return JsonResponse({'movies': results})
