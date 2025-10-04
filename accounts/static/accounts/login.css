@@ -1,0 +1,35 @@
+body{
+    background-image: url(https://4kwallpapers.com/images/wallpapers/batman-arkham-2560x1440-16093.jpg);
+}
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.gradient-custom {
+    /* Background image */
+    background: url("{% static 'accounts/movie-bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Transparent card with blur */
+.card {
+    background: rgba(255, 255, 255, 0.1); /* almost transparent */
+    backdrop-filter: blur(10px);          /* blur the background behind */
+    -webkit-backdrop-filter: blur(10px);  /* Safari support */
+    border-radius: 1rem;
+    border: 1px solid rgba(255,255,255,0.2); /* subtle border */
+    padding: 2rem;
+    color: white;
+}
+
+/* Optional: style form inputs to be semi-transparent */
+.form-control {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white
+}
