@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect,HttpResponse
-from .models import *
+from .models import Actor,Director,Movies
 from accounts.models import *
+from actors.models import *
+from directors.models import *
 from django.http import JsonResponse
 
 # Create your views here.
@@ -9,8 +11,8 @@ def dashboard(request):
     if 'userid' not in request.session:
         return redirect('login_page')
     movie=Movies.objects.all()
-    actor=Actors.objects.all()
-    director=Directors.objects.all()
+    actor=Actor.objects.all()
+    director=Director.objects.all()
     data={
         'Movies':movie,
         'Actors':actor,

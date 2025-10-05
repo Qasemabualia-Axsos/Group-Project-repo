@@ -17,6 +17,7 @@
                 <div class="card shadow-lg rounded p-4 w-100" style="max-width: 960px; background-color: white;">
                     <div class="row g-4 align-items-center">
                         <a href="{% url 'movies:dashboard' %}" class="btn btn-secondary">Dashboard</a>
+                        <a href="{% url 'reviews:movie_reviews' movie.id%}" class="btn btn-secondary">Review Now!</a>
                         <!-- Movie Info -->
                         <div class="col-md-7">
                             <h2 class="mb-3">{{ movie.title }}</h2>

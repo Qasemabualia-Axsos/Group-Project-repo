@@ -2,23 +2,9 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Actors, Directors, Movies
+from .models import Actor, Director, Movies
 
 # Custom Admin for Actors
-@admin.register(Actors)
-class ActorAdmin(admin.ModelAdmin):
-    list_display = ("name", "created_at", "updated_at")
-    search_fields = ("name",)
-    list_filter = ("created_at",)
-    ordering = ("-created_at",)
-
-# Custom Admin for Directors
-@admin.register(Directors)
-class DirectorAdmin(admin.ModelAdmin):
-    list_display = ("name", "created_at", "updated_at")
-    search_fields = ("name",)
-    list_filter = ("created_at",)
-    ordering = ("-created_at",)
 
 # Custom Admin for Movies
 @admin.register(Movies)

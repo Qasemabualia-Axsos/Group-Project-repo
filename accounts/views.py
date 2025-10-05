@@ -8,8 +8,8 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     movie=Movies.objects.all()
-    actor=Actors.objects.all()
-    director=Directors.objects.all()
+    actor=Actor.objects.all()
+    director=Director.objects.all()
     data={
         'Movies':movie,
         'Actors':actor,
@@ -32,34 +32,34 @@ def login(request):
         if user and bcrypt.checkpw(request.POST.get('password').encode(),user.password.encode()):
                 request.session['userid']=user.id
                 request.session['first_name']=user.first_name
-                # messages.success(request,'Successfully logged in !',extra_tags='login')
+                messages.success(request, 'Logged in successfully!', extra_tags='login')
                 return redirect('movies:dashboard')
         else:
             messages.error(request,'Invalid email or password',extra_tags='login')
             return redirect('accounts:login_page')
 
 def register(request):
-    if request.method=='POST':
-        errors=Users.objects.user_validator(request.POST)
-        if len(errors)>0:
-            for feild ,error in errors.items():
-                messages.error(request,error,extra_tags=feild)
+    if request.method == 'POST':
+        errors = Users.objects.user_validator(request.POST)
+        if errors:
+            for field, error in errors.items():
+                messages.error(request, error, extra_tags=field)
             return redirect('accounts:register_page')
 
-        else:
-            password=request.POST.get('password')
-            pw_hash=bcrypt.hashpw(password.encode(),bcrypt.gensalt()).decode()
-    
-        Users.objects.create(
-                first_name=request.POST.get('first_name'),
-                last_name=request.POST.get('last_name'),
-                email=request.POST.get('email'),
-                password=pw_hash
+        pw_hash = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()).decode()
+        user = Users.objects.create(
+            first_name=request.POST['first_name'],
+            last_name=request.POST['last_name'],
+            email=request.POST['email'],
+            password=pw_hash
         )
-        request.session['first_name']=request.POST.get('first_name')
-        messages.success(request,'Successfully create User',extra_tags='register')
-        return redirect('accounts:register_page')
-    return redirect('accounts:register_page')
+
+        request.session['userid'] = user.id
+        request.session['first_name'] = user.first_name
+        messages.success(request, 'Account created successfully!', extra_tags='register')
+        return redirect('movies:dashboard')
+
+    return render(request, 'accounts:register_page')
 
 
 def user_profile(request):

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card bg-dark border-warning p-4">
+    <h2 class="text-info">{{ director.name }}</h2>
+    {% if director.profile_img %}
+    <img src="{{ director.profile_img.url }}" class="rounded-circle mb-3" width="150" height="150">
+    {% endif %}
+    <p>{{ director.bio }}</p>
+    <h4 class="text-warning mt-3">Directed Movies</h4>
+    <ul>
+        {% for movie in director.movies.all %}
+        <li>{{ movie.title }} ({{ movie.release_year }})</li>
+        {% empty %}
+        <li>No movies listed yet.</li>
+        {% endfor %}
+    </ul>
+    <div class="mt-3">
+        <a href="{% url 'directors:director_update' director.id %}" class="btn btn-info btn-sm">Edit</a>
+        <a href="{% url 'directors:director_delete' director.id %}" class="btn btn-danger btn-sm">Delete</a>
+    </div>
+</div>
+{% endblock %}
