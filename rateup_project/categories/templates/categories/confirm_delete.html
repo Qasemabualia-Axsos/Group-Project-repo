@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="text-danger mb-4">Delete Category</h2>
+    <p>Are you sure you want to delete <strong>{{ category.name }}</strong>?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Confirm Delete
+        </button>
+        <a href="{% url 'categories:index' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

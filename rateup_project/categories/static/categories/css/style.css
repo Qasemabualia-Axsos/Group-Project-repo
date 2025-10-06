@@ -1,0 +1,13 @@
+.category-card {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    transition: all 0.3s ease-in-out;
+    min-height: 180px;
+}
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+.form-container {
+    max-width: 600px;
+}

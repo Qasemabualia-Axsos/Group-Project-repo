@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'reviews/css/reviews.css' %}">
+
+<div class="container mt-5">
+    <h2 class="text-warning mb-4">My Reviews</h2>
+
+    {% if reviews %}
+    <div class="row">
+        {% for review in reviews %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-lg p-3 h-100" style="background: #1e1e2f; color: white; border-radius: 12px;">
+                <h5 class="mb-2">{{ review.movie.title }}</h5>
+                <p class="mb-1">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            ⭐
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                <p class="small text-muted">Posted on {{ review.created_at|date:"M d, Y" }}</p>
+                <p>{{ review.comment }}</p>
+
+                <div class="mt-auto">
+                    <a href="{% url 'reviews:edit_review' review.id %}" class="btn btn-sm btn-outline-warning me-2">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state text-center">
+        <i class="bi bi-chat-square-text fs-1"></i>
+        <p class="mt-2">You haven't written any reviews yet.</p>
+        <a href="{% url 'movies:movie_list' %}" class="btn movie-btn mt-2">Browse Movies</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

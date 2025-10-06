@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Poster -->
+        <div class="col-md-4">
+            {% if movie.poster %}
+            <img src="{{ movie.poster.url }}" class="img-fluid rounded shadow" alt="{{ movie.title }}">
+            {% else %}
+            <img src="{% static 'images/RateUp-Logo.png' %}" class="img-fluid rounded shadow" alt="No Poster">
+            {% endif %}
+        </div>
+
+        <!-- Details -->
+        <div class="col-md-8">
+            <h2 class="text-warning">{{ movie.title }}</h2>
+            <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+            <p>{{ movie.description }}</p>
+
+            <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
+
+            {% if movie.categories.all %}
+            <p><strong>Categories:</strong>
+                {% for cat in movie.categories.all %}
+                <span class="badge bg-warning text-dark">{{ cat.name }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if movie.actors.all %}
+            <p><strong>Actors:</strong>
+                {% for actor in movie.actors.all %}
+                <span class="badge bg-secondary">{{ actor.name }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if movie.directors.all %}
+            <p><strong>Directors:</strong>
+                {% for director in movie.directors.all %}
+                <span class="badge bg-info text-dark">{{ director.name }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            <div class="mt-3">
+                <a href="{% url 'movies:movie-edit' movie.id %}" class="btn btn-outline-warning">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a href="{% url 'movies:movie-delete' movie.id %}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="reviews mt-5">
+        <h3 class="text-warning">Reviews</h3>
+        {% for review in movie.reviews.all %}
+        <div class="review-card">
+            <p><strong>{{ review.user.username }}</strong> rated {{ review.rating }}/5 ⭐</p>
+            <p>{{ review.comment }}</p>
+            <small class="text-muted">Posted on {{ review.created_at|date:"M d, Y" }}</small>
+        </div>
+        {% empty %}
+        <p>No reviews yet. Be the first!</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

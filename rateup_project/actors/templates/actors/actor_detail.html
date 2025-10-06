@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ actor.name }}</h2>
+    {% if actor.profile_img %}
+    <img src="{{ actor.profile_img.url }}" class="img-thumbnail mb-3" alt="{{ actor.name }}">
+    {% endif %}
+    <p>{{ actor.bio }}</p>
+
+    <h4>Movies</h4>
+    <ul>
+        {% for movie in actor.movies.all %}
+        <li><a href="{% url 'movies:movie_detail' movie.id %}">{{ movie.title }}</a></li>
+        {% empty %}
+        <p>No movies linked.</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'actors:actor_update' actor.id %}" class="btn btn-warning">Edit</a>
+    <a href="{% url 'actors:actor_delete' actor.id %}" class="btn btn-danger">Delete</a>
+</div>
+{% endblock %}

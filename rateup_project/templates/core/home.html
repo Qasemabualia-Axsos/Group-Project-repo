@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero d-flex align-items-center justify-content-center text-center text-light">
+    <div>
+        <h1 class="fw-bold display-4">Discover the Best Movies & Stars</h1>
+        <p class="lead">Explore Ratings, Reviews & Your Favorite Celebrities</p>
+        <a href="/movies/" class="btn search-btn btn-lg mt-3">Start Exploring</a>
+    </div>
+</section>
+
+<div class="container mt-5">
+
+    <!-- Featured Tiles -->
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm bg-dark text-light">
+                <img src="{% static 'images/RateUp-Logo.png' %}" class="card-img-top" alt="Movies">
+                <div class="card-body">
+                    <h5 class="card-title">Movies</h5>
+                    <p class="card-text">Browse the latest movies.</p>
+                    <a href="/movies/" class="btn search-btn w-100">Explore</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm bg-dark text-light">
+                <img src="{% static 'images/RateUp-Logo.png' %}" class="card-img-top" alt="Actors">
+                <div class="card-body">
+                    <h5 class="card-title">Actors</h5>
+                    <p class="card-text">Find details about your favorite stars.</p>
+                    <a href="/actors/" class="btn search-btn w-100">Explore</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm bg-dark text-light">
+                <img src="{% static 'images/RateUp-Logo.png' %}" class="card-img-top" alt="Reviews">
+                <div class="card-body">
+                    <h5 class="card-title">Reviews</h5>
+                    <p class="card-text">See what people are saying about movies.</p>
+                    <a href="/reviews/" class="btn search-btn w-100">Explore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trending Movies -->
+    <div class="movie-carousel mt-5">
+        <h3 class="mb-3 text-warning">Trending Movies</h3>
+        <div class="d-flex overflow-auto pb-3">
+            {% for i in "12345" %}
+            <div class="me-3 text-center trending-card">
+                <img src="{% static 'images/RateUp-Logo.png' %}" class="rounded movie-poster">
+                <p class="mt-2">Movie {{ i }}</p>
+                <div class="rating">
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    <i class="bi bi-star"></i>
+                    <span>3.5/5</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="genres mt-5">
+        <h3 class="mb-3 text-warning">Browse by Category</h3>
+        <div class="d-flex flex-wrap justify-content-center">
+            <a href="/categories/action/" class="badge bg-warning text-dark m-2 p-3 category-badge">Action</a>
+            <a href="/categories/comedy/" class="badge bg-warning text-dark m-2 p-3 category-badge">Comedy</a>
+            <a href="/categories/drama/" class="badge bg-warning text-dark m-2 p-3 category-badge">Drama</a>
+            <a href="/categories/horror/" class="badge bg-warning text-dark m-2 p-3 category-badge">Horror</a>
+        </div>
+    </div>
+
+    <!-- Spotlight -->
+    <div class="spotlight mt-5">
+        <h3 class="mb-3 text-warning">Spotlight</h3>
+        <div class="row">
+            <div class="col-6 col-md-2 text-center">
+                <img src="{% static 'images/RateUp-Logo.png' %}" class="rounded-circle spotlight-img">
+                <p class="mt-2">Actor 1</p>
+            </div>
+            <div class="col-6 col-md-2 text-center">
+                <img src="{% static 'images/RateUp-Logo.png' %}" class="rounded-circle spotlight-img">
+                <p class="mt-2">Director 1</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Reviews -->
+    <div class="latest-reviews mt-5">
+        <h3 class="mb-3 text-warning">Latest Reviews</h3>
+        <div class="list-group">
+            <a href="/reviews/1/" class="list-group-item list-group-item-action bg-dark text-light">
+                <strong>Movie 1</strong> - "Amazing visuals and story!"
+            </a>
+            <a href="/reviews/2/" class="list-group-item list-group-item-action bg-dark text-light">
+                <strong>Movie 2</strong> - "Great acting, but slow pacing."
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

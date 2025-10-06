@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-warning">Categories</h2>
+        <a href="{% url 'categories:create' %}" class="btn search-btn">
+            <i class="bi bi-plus-circle"></i> Add Category
+        </a>
+    </div>
+
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card category-card shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">{{ category.name }}</h5>
+                    <p class="card-text">{{ category.description|truncatechars:80 }}</p>
+                    <a href="{% url 'categories:detail' category.id %}" class="btn btn-outline-light w-100">View</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No categories found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

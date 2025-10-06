@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 form-container">
+    <h2 class="text-warning mb-4">{{ form_title }}</h2>
+    <form method="POST" class="shadow-sm p-4 bg-dark text-light rounded">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn search-btn w-100 mt-3">
+            <i class="bi bi-save"></i> Save
+        </button>
+    </form>
+</div>
+{% endblock %}

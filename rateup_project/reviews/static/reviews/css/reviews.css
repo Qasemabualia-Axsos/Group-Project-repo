@@ -1,0 +1,75 @@
+.review-form {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #1c1c1c; /* closer to accounts & movies theme */
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+
+.review-form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #f5c518; /* IMDb yellow (used in movies) */
+    font-weight: bold;
+}
+
+.review-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #ddd;
+}
+
+.review-form input,
+.review-form select,
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #0f0f0f;
+    color: #fff;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-form input:focus,
+.review-form select:focus,
+.review-form textarea:focus {
+    outline: none;
+    border-color: #f5c518;
+    box-shadow: 0 0 6px rgba(245, 197, 24, 0.6);
+}
+
+/* Buttons */
+.btn {
+    background: #f5c518; /* match movie-btn */
+    color: #000 !important;
+    font-weight: bold;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background: #e0b500;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: #444;
+    color: #fff !important;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #666;
+}

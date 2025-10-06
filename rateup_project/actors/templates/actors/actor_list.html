@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Actors</h2>
+    <a href="{% url 'actors:actor_create' %}" class="btn btn-success mb-3">Add Actor</a>
+    <div class="row">
+        {% for actor in actors %}
+        <div class="col-md-3 mb-4">
+            <div class="card shadow">
+                {% if actor.profile_img %}
+                <img src="{{ actor.profile_img.url }}" class="card-img-top" alt="{{ actor.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ actor.name }}</h5>
+                    <a href="{% url 'actors:actor_detail' actor.id %}" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No actors available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

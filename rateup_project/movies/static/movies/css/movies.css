@@ -1,0 +1,118 @@
+/* ===================
+   Movies App Styling
+=================== */
+
+/* Movie Cards */
+.movie-card {
+    background: #1c1c1c;
+    border: 1px solid #2c2c2c;
+    border-radius: 12px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+.movie-poster {
+    height: 280px;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.card-body {
+    flex-grow: 1;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: #1c1c1c;
+    border-radius: 12px;
+    border: 1px solid #2c2c2c;
+    color: #aaa;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #f5c518;
+    margin-bottom: 15px;
+}
+
+/* Movie Form */
+.movie-form {
+    background: #1c1c1c;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.movie-form label {
+    font-weight: bold;
+    color: #f5c518;
+    margin-bottom: 6px;
+}
+
+.movie-form .form-control {
+    background: #2c2c2c;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.movie-form .form-control:focus {
+    border-color: #f5c518;
+    box-shadow: 0 0 5px rgba(245, 197, 24, 0.6);
+}
+
+/* Buttons */
+.movie-btn {
+    background: #f5c518;
+    color: #000;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 10px 20px;
+    transition: 0.3s ease;
+}
+
+.movie-btn:hover {
+    background: #e0b500;
+    color: #000;
+}
+
+.btn-outline-warning {
+    border-color: #f5c518;
+    color: #f5c518;
+}
+
+.btn-outline-warning:hover {
+    background: #f5c518;
+    color: #000;
+}
+
+/* Reviews */
+.review-card {
+    background: #1c1c1c;
+    border: 1px solid #2c2c2c;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.review-actions a {
+    margin-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .movie-poster {
+        height: 220px;
+    }
+}

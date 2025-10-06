@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'movies/css/movies.css' %}">
+
+<div class="container mt-5">
+    <div class="movie-detail">
+        <h2 class="mb-4 text-success">
+            <i class="bi bi-plus-circle"></i> Add New Movie
+        </h2>
+
+        <form method="POST" enctype="multipart/form-data" class="row g-3">
+            {% csrf_token %}
+
+            <div class="col-md-6">
+                <label for="id_title" class="form-label">Title</label>
+                {{ form.title }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_release_date" class="form-label">Release Date</label>
+                {{ form.release_date }}
+            </div>
+
+            <div class="col-12">
+                <label for="id_description" class="form-label">Description</label>
+                {{ form.description }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_poster" class="form-label">Poster</label>
+                {{ form.poster }}
+            </div>
+
+            <div class="col-md-6">
+                <label for="id_trailer_url" class="form-label">Trailer URL</label>
+                {{ form.trailer_url }}
+            </div>
+
+            <div class="col-12">
+                <label for="id_categories" class="form-label">Categories</label>
+                {{ form.categories }}
+            </div>
+
+            <div class="col-12">
+                <label for="id_actors" class="form-label">Actors</label>
+                {{ form.actors }}
+            </div>
+
+            <div class="col-12">
+                <label for="id_directors" class="form-label">Directors</label>
+                {{ form.directors }}
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Save Movie
+                </button>
+                <a href="{% url 'movies:movie_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ director.name }}</h2>
+    {% if director.profile_img %}
+    <img src="{{ director.profile_img.url }}" class="img-thumbnail mb-3" alt="{{ director.name }}">
+    {% endif %}
+    <p>{{ director.bio }}</p>
+
+    <h4>Movies Directed</h4>
+    <ul>
+        {% for movie in director.movies.all %}
+        <li><a href="{% url 'movies:movie_detail' movie.id %}">{{ movie.title }}</a></li>
+        {% empty %}
+        <p>No movies linked.</p>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'directors:director_update' director.id %}" class="btn btn-warning">Edit</a>
+    <a href="{% url 'directors:director_delete' director.id %}" class="btn btn-danger">Delete</a>
+</div>
+{% endblock %}
