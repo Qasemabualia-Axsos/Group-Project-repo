@@ -4,16 +4,23 @@ from django.contrib import messages
 from movies.models import *
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Avg, Count
 
 # Create your views here.
 def home(request):
     movie=Movies.objects.all()
     actor=Actor.objects.all()
     director=Director.objects.all()
+    top_movies = Movies.objects.annotate(
+        review_count=Count('reviews'),
+        avg_rating=Avg('reviews__rating')
+    ).order_by('-avg_rating')[:5]
+
     data={
         'Movies':movie,
         'Actors':actor,
-        'Directors':director
+        'Directors':director,
+        'top_movies': top_movies
     }
     return render (request,'home.html',data)
 
@@ -32,11 +39,14 @@ def login(request):
         if user and bcrypt.checkpw(request.POST.get('password').encode(),user.password.encode()):
                 request.session['userid']=user.id
                 request.session['first_name']=user.first_name
+                request.session['last_name']=user.last_name
                 messages.success(request, 'Logged in successfully!', extra_tags='login')
                 return redirect('movies:dashboard')
         else:
             messages.error(request,'Invalid email or password',extra_tags='login')
             return redirect('accounts:login_page')
+    return redirect('accounts:login_page')
+
 
 def register(request):
     if request.method == 'POST':

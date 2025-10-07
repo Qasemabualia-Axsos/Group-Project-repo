@@ -4,21 +4,38 @@ from accounts.models import *
 from actors.models import *
 from directors.models import *
 from django.http import JsonResponse
+from django.db.models import Avg, Count
+from reviews.models import *
+
 
 # Create your views here.
-
 def dashboard(request):
     if 'userid' not in request.session:
-        return redirect('login_page')
-    movie=Movies.objects.all()
-    actor=Actor.objects.all()
-    director=Director.objects.all()
-    data={
-        'Movies':movie,
-        'Actors':actor,
-        'Directors':director
+        return redirect('accounts:login_page')
+
+    # All movies, actors, directors
+    movies = Movies.objects.all()
+    actors = Actor.objects.all()
+    directors = Director.objects.all()
+
+    # Top movies by average rating (top 5)
+    top_movies = Movies.objects.annotate(
+        review_count=Count('reviews'),
+        avg_rating=Avg('reviews__rating')
+    ).order_by('-avg_rating')[:5]
+
+    latest_reviews = Review.objects.select_related('movie', 'user').order_by('-created_at')[:5]
+
+
+    context = {
+        'Movies': movies,
+        'Actors': actors,
+        'Directors': directors,
+        'top_movies': top_movies,
+        'latest_reviews': latest_reviews
     }
-    return render(request,'dashboard.html',data)
+
+    return render(request, 'dashboard.html', context)
 
 def logout(request):
     request.session.flush()
@@ -43,6 +60,17 @@ def view_movie(request,movie_id):
         'directors': directors
     }
     return render (request,'movie.html',data)
+
+def top_movies(request):
+    movies = Movies.objects.annotate(
+        review_count=Count('reviews'),
+        avg_rating=Avg('reviews__rating')
+    ).order_by('-avg_rating')[:10]  
+
+    context = {
+        'top_movies': movies
+    }
+    return render(request, 'top_movies.html', context)
 
 def ajax_search_movies(request):
     query = request.GET.get('q', '')

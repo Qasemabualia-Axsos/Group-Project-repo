@@ -1,6 +1,7 @@
 from django.db import models
 from actors.models import Actor
 from directors.models import Director
+from categories.models import Category
 # Create your models here.
 
     
@@ -15,6 +16,7 @@ class Movies(models.Model):
 
     actors=models.ManyToManyField(Actor,related_name='movies')
     directors=models.ManyToManyField(Director,related_name='movies')
+    categories = models.ManyToManyField(Category, related_name='movies')
 
     def __str__(self):
         return f'{self.title} {self.release_date}'

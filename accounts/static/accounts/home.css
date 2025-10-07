@@ -137,3 +137,8 @@ body{
   color: #00A3CC;
   text-decoration: underline;
 }
+
+#movie_name{
+  text-decoration: none;
+  color: green;
+}

@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('accounts.urls')),
     path('',include('movies.urls')),
-    path('',include('reviews.urls')),
+    path('reviews/',include('reviews.urls')),
+    path('actors/',include('actors.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

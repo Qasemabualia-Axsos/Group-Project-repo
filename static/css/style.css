@@ -235,3 +235,64 @@ h4 {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 20px;
 }
+
+#searchResults {
+  position: absolute;
+  top: 60%;
+  left: 20%;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  width: 45%;
+  margin-left: 25px;
+
+}
+
+/* Each result card */
+#searchResults .result-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 207, 255, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+#searchResults .result-card:hover {
+  background-color: #e5faff;
+  transform: scale(1.02);
+}
+
+/* Thumbnail */
+#searchResults .result-card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #00CFFF;
+}
+
+/* Movie title */
+#searchResults .result-card a {
+  font-weight: bold;
+  color: #0B2343;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+#searchResults .result-card a:hover {
+  color: #00A3CC;
+  text-decoration: underline;
+}
+
+#movie_name{
+  text-decoration: none;
+  color: green;
+}

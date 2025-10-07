@@ -64,7 +64,7 @@ a.btn {
 
 <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="{% url 'accounts:home' %}">MovieReviews</a>
+        <a class="navbar-brand fw-bold" href="{% url 'movies:dashboard' %}">MovieReviews</a>
         <div class="d-flex gap-2">
             <a href="{% url 'movies:dashboard' %}" class="btn btn-primary btn-sm">Dashboard</a>
             {% if request.session.userid %}

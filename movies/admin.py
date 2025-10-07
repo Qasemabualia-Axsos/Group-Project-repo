@@ -12,5 +12,5 @@ class MovieAdmin(admin.ModelAdmin):
     list_display = ("title", "release_date", "created_at", "updated_at")
     search_fields = ("title", "description")
     list_filter = ("release_date", "created_at")
-    filter_horizontal = ("actors", "directors")  # nice UI for ManyToMany fields
+    filter_horizontal = ("actors", "directors", "categories")  # Add categories here
     ordering = ("-release_date",)
