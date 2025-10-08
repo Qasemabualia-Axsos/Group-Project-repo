@@ -1,35 +1,112 @@
-body{
-    background-image: url(https://4kwallpapers.com/images/wallpapers/batman-arkham-2560x1440-16093.jpg);
-}
-body, html {
+/* Background setup */
+body {
+    background-color: #1e2125;
+    background-image: url("{% static 'accounts/movie-bg.jpg' %}");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     height: 100%;
     margin: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
+/* Dark overlay for readability */
 .gradient-custom {
-    /* Background image */
-    background: url("{% static 'accounts/movie-bg.jpg' %}") no-repeat center center;
-    background-size: cover;
+    background: rgba(0, 0, 0, 0.6);
+    background-blend-mode: darken;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Transparent card with blur */
+/* Glassy card style */
 .card {
-    background: rgba(255, 255, 255, 0.1); /* almost transparent */
-    backdrop-filter: blur(10px);          /* blur the background behind */
-    -webkit-backdrop-filter: blur(10px);  /* Safari support */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 1rem;
-    border: 1px solid rgba(255,255,255,0.2); /* subtle border */
-    padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+
+    /* ↓ reduce internal space ↓ */
+    padding: 1.2rem 1.5rem;
+
+    /* optional: slightly shrink it visually */
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* Heading */
+h2 {
+    color: #f5c518; /* gold accent */
+    font-weight: 700;
+}
+
+/* Paragraph subtitles */
+.text-white-50 {
+    color: #aaa !important;
+}
+
+/* Labels */
+.form-label, .first_name, .last_name {
+    color: #f5c518;
+    font-weight: 500;
+}
+
+/* Inputs */
+.form-control {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: #ccc;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid #f5c518;
+    box-shadow: 0 0 10px rgba(245, 197, 24, 0.3);
     color: white;
 }
 
-/* Optional: style form inputs to be semi-transparent */
-.form-control {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white
+/* Button */
+.btn-outline-light {
+    border-color: #f5c518;
+    color: #f5c518;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: #f5c518;
+    color: #1e2125;
+}
+
+/* Error messages */
+.text-danger {
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Links */
+a {
+    color: #f5c518;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Scrollbar (optional aesthetic improvement) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #f5c518;
+    border-radius: 4px;
 }

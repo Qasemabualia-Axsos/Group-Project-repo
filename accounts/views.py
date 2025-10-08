@@ -25,7 +25,6 @@ def home(request):
     return render (request,'home.html',data)
 
 def login_page(request):
-
     return render (request,'login.html')
 
 def register_page(request):
