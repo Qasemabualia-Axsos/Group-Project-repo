@@ -1,4 +1,241 @@
+{% extends "base.html" %}
 {% load static %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- 🎬 Movie Info -->
+  <div class="text-center mb-5 p-4 rounded shadow bg-white">
+    <img src="{{ movie.cover_img.url }}" alt="{{ movie.title }}"
+         class="img-fluid rounded mb-3"
+         style="max-height: 300px; object-fit: cover;">
+    <h2 class="fw-bold text-dark">{{ movie.title }}</h2>
+    <p class="text-muted mb-2">{{ movie.description }}</p>
+    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+    {% if movie.trailer %}
+    <a href="{{ movie.trailer }}" target="_blank" class="btn btn-watch">
+      🎥 Watch Trailer
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- 💬 Messages -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- ⭐ Review Form -->
+  {% if request.session.userid %}
+  <div class="card border-0 shadow-sm mb-5">
+    <div class="card-body p-4">
+      <h4 class="card-title text-center mb-4 text-primary fw-semibold">
+        {% if edit_review %}Update Your Review{% else %}Leave a Review{% endif %}
+      </h4>
+
+      <form method="POST" class="needs-validation">
+        {% csrf_token %}
+        <input type="hidden" name="review_id" value="{{ edit_review.id|default:'' }}">
+
+        <!-- ⭐ Star Rating -->
+        <div class="mb-4 text-center">
+          <label class="form-label fw-semibold d-block mb-2">Your Rating:</label>
+          <div class="star-rating mx-auto">
+            {% for i in "54321"|make_list %}
+            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+                   {% if edit_review.rating == i|stringformat:"s" %}checked{% endif %}/>
+            <label for="star{{ i }}" title="{{ i }} stars">★</label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- 💬 Comment -->
+        <div class="mb-4">
+          <label for="comment" class="form-label fw-semibold">Comment</label>
+          <textarea class="form-control shadow-sm rounded-3" id="comment" name="comment"
+                    rows="4" placeholder="Share your thoughts...">{{ edit_review.comment|default:'' }}</textarea>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-submit px-4 py-2 rounded-3">
+            {% if edit_review %}Update Review{% else %}Submit Review{% endif %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% else %}
+    <p class="text-center">
+      <a href="{% url 'accounts:login_page' %}" class="text-primary fw-semibold">Log in</a> to leave a review.
+    </p>
+  {% endif %}
+
+  <!-- 📋 Reviews List -->
+  <h4 class="text-center text-primary fw-bold mb-4">All Reviews</h4>
+  <div class="row g-3">
+    {% if reviews %}
+      {% for review in reviews %}
+      <div class="col-12">
+        <div class="p-4 rounded shadow-sm bg-white border review-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <strong class="username">{{ review.user.first_name }} {{ review.user.last_name }}</strong><br>
+              <span class="rating-star text-warning fs-5">
+                {% for _ in "12345"|make_list %}
+                  {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+              </span>
+            </div>
+            <small class="text-muted">{{ review.created_at|date:"M d, Y H:i" }}</small>
+          </div>
+          <p class="comment-text mb-2">{{ review.comment }}</p>
+          {% if review.user.id == request.session.userid %}
+          <div class="text-end">
+            <a href="?edit={{ review.id }}" class="btn btn-action me-2">Edit</a>
+            <a href="?delete={{ review.id }}" class="btn btn-delete">Delete</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center text-muted">No reviews yet. Be the first to review!</p>
+    {% endif %}
+  </div>
+</div>
+
+
+<style>
+:root {
+  --primary: #0056b3;
+  --secondary: #f1c40f;
+  --bg-light: #f8f9fa;
+  --text-dark: #333333;
+}
+
+body {
+  background-color: var(--bg-light);
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 15px;
+}
+.star-rating {
+  direction: rtl;
+  display: inline-flex;
+  gap: 5px;
+}
+.star-rating input {
+  display: none;
+}
+.star-rating label {
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: var(--secondary);
+}
+
+
+.btn-watch {
+  background: linear-gradient(135deg, var(--secondary) 0%, #ffde59 100%);
+  color: #333;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+.btn-watch:hover {
+  background: linear-gradient(135deg, #ffcf00 0%, var(--secondary) 100%);
+  transform: translateY(-2px);
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--primary) 0%, #007bff 100%);
+  color: white;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s ease;
+}
+.btn-submit:hover {
+  background: linear-gradient(135deg, #003f87 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+}
+
+
+.btn-action, .btn-delete {
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-action {
+  background: linear-gradient(135deg, var(--primary) 0%, #007bff 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 91, 187, 0.3);
+}
+.btn-action:hover {
+  background: linear-gradient(135deg, #003f87 0%, #0056b3 100%);
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: linear-gradient(135deg, #ff5c5c 0%, #ff7878 100%);
+  color: white;
+  box-shadow: 0 2px 6px rgba(255, 90, 90, 0.3);
+}
+.btn-delete:hover {
+  background: linear-gradient(135deg, #e04a4a 0%, #ff5c5c 100%);
+  transform: translateY(-2px);
+}
+
+
+.review-card {
+  border-left: 5px solid var(--primary);
+  background-color: #ffffff;
+}
+.username {
+  color: var(--primary);
+  font-weight: 600;
+}
+.comment-text {
+  color: var(--text-dark);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+</style>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,7 +313,7 @@ a.btn {
 
 <div class="container mt-5">
 
-    <!-- Movie Info -->
+ 
     <div class="movie-card mb-5 text-center">
         <h2 class="fw-bold">{{ movie.title }}</h2>
         <p class="text-light">{{ movie.description }}</p>
@@ -86,7 +323,6 @@ a.btn {
         {% endif %}
     </div>
 
-    <!-- Messages -->
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -96,7 +332,7 @@ a.btn {
         {% endfor %}
     {% endif %}
 
-    <!-- Add/Edit Review Form -->
+ 
     {% if request.session.userid %}
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
@@ -125,7 +361,7 @@ a.btn {
         <p class="text-center"><a href="{% url 'accounts:login_page' %}">Log in</a> to leave a review.</p>
     {% endif %}
 
-    <!-- Reviews List -->
+
     <h4 class="mb-4 fw-semibold">All Reviews</h4>
     <div class="row g-3">
         {% if reviews %}
@@ -163,4 +399,6 @@ a.btn {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> -->
+
+
