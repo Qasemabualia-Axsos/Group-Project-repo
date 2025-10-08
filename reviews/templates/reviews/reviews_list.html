@@ -1,0 +1,28 @@
+{% for review in reviews %}
+<div class="col-12">
+  <div class="p-4 rounded shadow-sm bg-white border review-card">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <strong class="username">{{ review.user.first_name }} {{ review.user.last_name }}</strong><br>
+        <span class="rating-star text-warning fs-5">
+          {% for _ in "12345"|make_list %}
+            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+          {% endfor %}
+        </span>
+      </div>
+      <small class="text-muted">{{ review.created_at|date:"M d, Y H:i" }}</small>
+    </div>
+    <p class="comment-text mb-2">{{ review.comment }}</p>
+    {% if review.user.id == request.session.userid %}
+    <div class="text-end">
+      <button class="btn btn-action edit-review me-2"
+              data-id="{{ review.id }}" data-rating="{{ review.rating }}"
+              data-comment="{{ review.comment }}">Edit</button>
+      <button class="btn btn-delete delete-review" data-id="{{ review.id }}">Delete</button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% empty %}
+  <p class="text-center text-muted">No reviews yet. Be the first to review!</p>
+{% endfor %}
