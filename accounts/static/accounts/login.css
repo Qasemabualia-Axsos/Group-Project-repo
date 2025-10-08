@@ -1,35 +1,83 @@
-body{
-    background-image: url(https://4kwallpapers.com/images/wallpapers/batman-arkham-2560x1440-16093.jpg);
-}
 body, html {
     height: 100%;
     margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #1e2125; /* dark background */
 }
 
+/* Container section */
 .gradient-custom {
-    /* Background image */
-    background: url("{% static 'accounts/movie-bg.jpg' %}") no-repeat center center;
-    background-size: cover;
-    height: 100vh;
+    background-color: #1e2125; /* solid dark background */
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
 }
 
-/* Transparent card with blur */
+/* Login Card */
 .card {
-    background: rgba(255, 255, 255, 0.1); /* almost transparent */
-    backdrop-filter: blur(10px);          /* blur the background behind */
-    -webkit-backdrop-filter: blur(10px);  /* Safari support */
+    background: rgba(32, 35, 39, 0.95); /* slightly lighter dark */
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
-    border: 1px solid rgba(255,255,255,0.2); /* subtle border */
-    padding: 2rem;
-    color: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    color: #fff;
 }
 
-/* Optional: style form inputs to be semi-transparent */
+/* Headings */
+.card h2 {
+    color: #f5c518; /* golden accent */
+    font-weight: 700;
+}
+
+/* Labels */
+.form-label {
+    color: #ddd;
+    font-weight: 500;
+}
+
+/* Input fields */
 .form-control {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #f5c518;
+    box-shadow: none;
+    color: #fff;
+}
+
+/* Buttons */
+.btn-outline-light {
+    border-color: #f5c518;
+    color: #f5c518;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background-color: #f5c518;
+    color: #1e2125;
+}
+
+/* Links */
+a {
+    color: #f5c518;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Messages */
+.messages {
+    margin-top: 10px;
+    list-style: none;
+    padding: 0;
+}
+
+.text-white-50 {
+    color: #aaa !important;
 }
