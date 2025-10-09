@@ -25,6 +25,8 @@ urlpatterns = [
     path('',include('movies.urls')),
     path('reviews/',include('reviews.urls')),
     path('actors/',include('actors.urls')),
+        path('directors/', include('directors.urls', namespace='directors')),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

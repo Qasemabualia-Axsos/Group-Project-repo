@@ -1,10 +1,172 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 class="text-danger">Delete Director</h2>
-<p>Are you sure you want to delete <strong>{{ director.name }}</strong>?</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a href="{% url 'directors:director_list' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<style>
+    .delete-page {
+        background-color: #0f0f0f;
+        min-height: 100vh;
+        padding: 30px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .delete-container {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 50px 40px;
+        border: 2px solid #dc143c;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(220, 20, 60, 0.2);
+    }
+    
+    .warning-icon {
+        font-size: 72px;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+    }
+    
+    .delete-title {
+        color: #dc143c;
+        font-size: 32px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .delete-message {
+        color: #cccccc;
+        font-size: 18px;
+        margin-bottom: 12px;
+        line-height: 1.6;
+    }
+    
+    .director-name {
+        color: #f5c518;
+        font-weight: 700;
+        font-size: 20px;
+    }
+    
+    .warning-text {
+        color: #dc143c;
+        font-size: 15px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        padding: 12px;
+        background-color: rgba(220, 20, 60, 0.1);
+        border-radius: 4px;
+        border-left: 4px solid #dc143c;
+    }
+    
+    .delete-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .btn-confirm-delete {
+        background-color: #dc143c;
+        color: #ffffff;
+        padding: 14px 36px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        flex: 1;
+        max-width: 200px;
+    }
+    
+    .btn-confirm-delete:hover {
+        background-color: #b81030;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(220, 20, 60, 0.4);
+    }
+    
+    .btn-cancel {
+        background-color: #333333;
+        color: #f5c518;
+        padding: 14px 36px;
+        border: 2px solid #f5c518;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        flex: 1;
+        max-width: 200px;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #f5c518;
+        color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(245, 197, 24, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .delete-container {
+            padding: 30px 24px;
+            margin: 0 15px;
+        }
+        
+        .delete-title {
+            font-size: 26px;
+        }
+        
+        .delete-message {
+            font-size: 16px;
+        }
+        
+        .delete-actions {
+            flex-direction: column;
+        }
+        
+        .btn-confirm-delete,
+        .btn-cancel {
+            width: 100%;
+            max-width: none;
+        }
+    }
+</style>
+
+<div class="delete-page">
+    <div class="delete-container">
+        <div class="warning-icon">⚠️</div>
+        <h2 class="delete-title">Delete Director</h2>
+        
+        <p class="delete-message">
+            Are you sure you want to delete
+        </p>
+        <p class="director-name">{{ director.name }}</p>
+        
+        <div class="warning-text">
+            ⚡ This action cannot be undone. All associated data will be permanently removed.
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="delete-actions">
+                <button type="submit" class="btn-confirm-delete">Yes, Delete</button>
+                <a href="{% url 'directors:director_list' %}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

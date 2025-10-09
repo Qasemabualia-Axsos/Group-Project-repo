@@ -1,24 +1,234 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 class="text-warning">{{ title }}</h2>
-<form method="post" enctype="multipart/form-data" class="bg-dark p-4 rounded border border-warning">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label class="form-label">Name</label>
-        {{ form.name }}
+<style>
+    .director-form-page {
+        background-color: #0f0f0f;
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .form-title {
+        color: #f5c518;
+        font-size: 32px;
+        margin-bottom: 30px;
+        font-weight: 600;
+    }
+    
+    .form-container {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 40px;
+        border: 2px solid #f5c518;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+    
+    .form-row.full-width {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-label {
+        color: #f5c518;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+    
+    .form-container input[type="text"],
+    .form-container input[type="url"],
+    .form-container input[type="date"],
+    .form-container input[type="file"],
+    .form-container textarea,
+    .form-container select {
+        width: 100%;
+        padding: 12px;
+        background-color: #2a2a2a;
+        border: 2px solid #333333;
+        border-radius: 4px;
+        color: #ffffff;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+    
+    .form-container input:focus,
+    .form-container textarea:focus,
+    .form-container select:focus {
+        outline: none;
+        border-color: #f5c518;
+        background-color: #333333;
+        box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.1);
+    }
+    
+    .form-container textarea {
+        min-height: 120px;
+        resize: vertical;
+        font-family: inherit;
+    }
+    
+    .form-container input[type="file"] {
+        padding: 10px;
+        cursor: pointer;
+    }
+    
+    .form-help-text {
+        color: #999999;
+        font-size: 13px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .form-help-text::before {
+        content: "ℹ️";
+        font-size: 14px;
+    }
+    
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 16px;
+        background-color: #2a2a2a;
+        border-radius: 4px;
+        border: 2px solid #333333;
+    }
+    
+    
+    .form-container input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #f5c518;
+    }
+    
+    .checkbox-label {
+        color: #ffffff;
+        font-size: 16px;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .submit-btn {
+        background-color: #f5c518;
+        color: #000000;
+        padding: 14px 36px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 30px;
+        width: 100%;
+    }
+    
+    .submit-btn:hover {
+        background-color: #e6b800;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 197, 24, 0.4);
+    }
+    
+    .form-section-title {
+        color: #f5c518;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 30px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #333333;
+    }
+    
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 24px;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+        }
+    }
+</style>
+
+<div class="director-form-page">
+    <div class="container">
+        <h2 class="form-title">{{ title }}</h2>
+        
+        <form method="post" enctype="multipart/form-data" class="form-container">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    {{ form.name }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nationality</label>
+                    {{ form.nationality }}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    {{ form.date_of_birth }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Profile Image</label>
+                    {{ form.profile_img }}
+                    <div class="form-help-text">JPG/PNG/WEBP ≤ 3MB</div>
+                </div>
+            </div>
+            
+            <div class="form-row full-width">
+                <div class="form-group">
+                    <label class="form-label">Biography</label>
+                    {{ form.bio }}
+                </div>
+            </div>
+            
+            <h3 class="form-section-title">External Links</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Website</label>
+                    {{ form.website }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">IMDb Profile</label>
+                    {{ form.imdb_url }}
+                </div>
+            </div>
+            
+            <div class="checkbox-wrapper">
+                {{ form.is_active }}
+                <label class="checkbox-label" for="{{ form.is_active.id_for_label }}">
+                    Active Director
+                </label>
+            </div>
+            
+            <button type="submit" class="submit-btn">Save Director</button>
+        </form>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Bio</label>
-        {{ form.bio }}
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Profile Image</label>
-        {{ form.profile_img }}
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Movies</label>
-        {{ form.movies }}
-    </div>
-    <button type="submit" class="btn btn-warning">Save</button>
-</form>
+</div>
 {% endblock %}

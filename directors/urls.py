@@ -1,8 +1,8 @@
+# directors/urls.py
 from django.urls import path
 from . import views
 
 app_name = "directors"
-
 urlpatterns = [
     path("", views.director_list, name="director_list"),
     path("<int:director_id>/", views.director_detail, name="director_detail"),

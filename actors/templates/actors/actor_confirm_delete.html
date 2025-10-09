@@ -1,10 +1,122 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 class="text-danger">Delete Actor</h2>
-<p>Are you sure you want to delete <strong>{{ actor.name }}</strong>?</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a href="{% url 'actors:actor_list' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<style>
+    .delete-page {
+        background-color: #0f0f0f;
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .delete-container {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 40px;
+        border: 2px solid #dc143c;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .delete-title {
+        color: #dc143c;
+        font-size: 32px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .delete-message {
+        color: #cccccc;
+        font-size: 18px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+    
+    .actor-name {
+        color: #f5c518;
+        font-weight: 700;
+    }
+    
+    .warning-icon {
+        font-size: 64px;
+        color: #dc143c;
+        margin-bottom: 20px;
+    }
+    
+    .delete-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .btn-confirm-delete {
+        background-color: #dc143c;
+        color: #ffffff;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .btn-confirm-delete:hover {
+        background-color: #b81030;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
+    }
+    
+    .btn-cancel {
+        background-color: #333333;
+        color: #f5c518;
+        padding: 12px 32px;
+        border: 2px solid #f5c518;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #f5c518;
+        color: #000000;
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+        .delete-container {
+            padding: 24px;
+        }
+        
+        .delete-actions {
+            flex-direction: column;
+        }
+        
+        .btn-confirm-delete,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="delete-container">
+    <div class="warning-icon">⚠️</div>
+    <h2 class="delete-title">Delete Actor</h2>
+    <p class="delete-message">
+        Are you sure you want to delete <span class="actor-name">{{ actor.name }}</span>?
+        <br><br>
+        This action cannot be undone.
+    </p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="delete-actions">
+            <button type="submit" class="btn-confirm-delete">Yes, Delete</button>
+            <a href="{% url 'actors:actor_list' %}" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

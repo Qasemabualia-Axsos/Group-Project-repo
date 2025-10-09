@@ -1,24 +1,133 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 class="text-warning">{{ title }}</h2>
-<form method="post" enctype="multipart/form-data" class="bg-dark p-4 rounded border border-info">
+<style>
+    .form-page {
+        background-color: #0f0f0f;
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .form-title {
+        color: #f5c518;
+        font-size: 32px;
+        margin-bottom: 30px;
+        font-weight: 600;
+    }
+    
+    .form-container {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 40px;
+        border: 2px solid #f5c518;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 24px;
+    }
+    
+    .form-label {
+        display: block;
+        color: #f5c518;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+    
+    .form-container input[type="text"],
+    .form-container input[type="file"],
+    .form-container textarea,
+    .form-container select {
+        width: 100%;
+        padding: 12px;
+        background-color: #2a2a2a;
+        border: 2px solid #333333;
+        border-radius: 4px;
+        color: #ffffff;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+    
+    .form-container input:focus,
+    .form-container textarea:focus,
+    .form-container select:focus {
+        outline: none;
+        border-color: #f5c518;
+        background-color: #333333;
+    }
+    
+    .form-container textarea {
+        min-height: 120px;
+        resize: vertical;
+        font-family: inherit;
+    }
+    
+    .form-container select {
+        cursor: pointer;
+    }
+    
+    .form-container input[type="file"] {
+        padding: 8px;
+        cursor: pointer;
+    }
+    
+    .submit-btn {
+        background-color: #f5c518;
+        color: #000000;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+    
+    .submit-btn:hover {
+        background-color: #e6b800;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 197, 24, 0.3);
+    }
+    
+    .help-text {
+        color: #999999;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 24px;
+        }
+    }
+</style>
+
+<h2 class="form-title">{{ title }}</h2>
+<form method="post" enctype="multipart/form-data" class="form-container">
     {% csrf_token %}
-    <div class="mb-3">
+    
+    <div class="form-group">
         <label class="form-label">Name</label>
         {{ form.name }}
     </div>
-    <div class="mb-3">
+    
+    <div class="form-group">
         <label class="form-label">Bio</label>
         {{ form.bio }}
     </div>
-    <div class="mb-3">
+    
+    <div class="form-group">
         <label class="form-label">Profile Image</label>
         {{ form.profile_img }}
     </div>
-    <div class="mb-3">
+    
+    <div class="form-group">
         <label class="form-label">Movies</label>
         {{ form.movies }}
     </div>
-    <button type="submit" class="btn btn-warning">Save</button>
+    
+    <button type="submit" class="submit-btn">Save</button>
 </form>
 {% endblock %}
