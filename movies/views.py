@@ -6,6 +6,10 @@ from directors.models import *
 from django.http import JsonResponse
 from django.db.models import Avg, Count
 from reviews.models import *
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Favorite
+API_KEY = "2cdda5a49ba08a74a18ca8712545b251"
 
 
 # Create your views here.
@@ -42,25 +46,25 @@ def logout(request):
     return redirect ('accounts:home')
 
 
-def view_movie(request,movie_id):
-    if 'userid' not in request.session:
-        return redirect('accounts:login_page')
+def view_movie(request, movie_id):
+    # Check login via session
 
-    # Filter and get the first matching movie (or None)
-    movie = Movies.objects.filter(id=movie_id).first()
-    if not movie:
-        return HttpResponse("Movie not found", status=404)
-
+    movie = get_object_or_404(Movies, id=movie_id)
     actors = movie.actors.all()
     directors = movie.directors.all()
 
-    data = {
+    # Fetch user's favorite movies using session userid
+    user_id = request.session.get('userid')
+    user_favorites = Favorite.objects.filter(user_id=user_id).values_list('movie_id', flat=True)
+
+    context = {
         'movie': movie,
         'actors': actors,
-        'directors': directors
+        'directors': directors,
+        'user_favorites': list(user_favorites),  # convert queryset to list
     }
-    return render (request,'movie.html',data)
 
+    return render(request, 'movie.html', context)
 def top_movies(request):
     movies = Movies.objects.annotate(
         review_count=Count('reviews'),
@@ -83,3 +87,17 @@ def ajax_search_movies(request):
             'cover': movie.cover_img.url,
         })
     return JsonResponse({'movies': results})
+
+
+def toggle_favorite(request, movie_id):
+    if 'userid' not in request.session:
+        return redirect('accounts:login_page')
+
+    user_id = request.session.get('userid')
+    movie = get_object_or_404(Movies, id=movie_id)
+
+    favorite, created = Favorite.objects.get_or_create(user_id=user_id, movie=movie)
+    if not created:
+        favorite.delete()  # remove if already exists
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))

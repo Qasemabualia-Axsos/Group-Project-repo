@@ -8,7 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Avg, Count
 import requests
 from dotenv import load_dotenv
-import datetime
+from django.template.loader import render_to_string
+
+
+
 
 load_dotenv()
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")  # Make sure your .env has:
@@ -16,38 +19,47 @@ OMDB_API_KEY = os.getenv("OMDB_API_KEY")  # Make sure your .env has:
 
 import requests
 
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.db.models import Avg, Count
+from movies.models import Movies
+from categories.models import Category
+import requests
+from movies.models import Favorite
+
+
 def home(request):
-    # Local DB data
-    movies = Movies.objects.all()
-    actors = Actor.objects.all()
-    directors = Director.objects.all()
+    categories = Category.objects.all()
+    selected_category = request.GET.get('category')
+
+    if selected_category:
+        movies = Movies.objects.filter(categories__name=selected_category).distinct()
+    else:
+        movies = Movies.objects.all()
+
+    # ✅ If it's an AJAX request, send JSON
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        movies_data = [
+            {
+                'id': m.id,
+                'title': m.title,
+                'release_date': m.release_date.strftime('%Y-%m-%d'),
+                'cover_img': m.cover_img.url if m.cover_img else '',
+            }
+            for m in movies
+        ]
+        return JsonResponse({'movies': movies_data})
+
     top_movies = Movies.objects.annotate(
         review_count=Count('reviews'),
         avg_rating=Avg('reviews__rating')
     ).order_by('-avg_rating')[:5]
 
-    # Fetch upcoming movies from RapidAPI
-    upcoming_movies = []
-    url = "https://upcoming-releases-movies.p.rapidapi.com/api/movie/upcoming/us"
-    headers = {
-        "x-rapidapi-host": "upcoming-releases-movies.p.rapidapi.com",
-        "x-rapidapi-key": "f88ebd443amsh0623ee9d3f6e39ap1b4552jsn0daa5643fe2f"
-    }
-
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        upcoming_movies = response.json()  # ✅ keep the list
-    except requests.exceptions.RequestException as e:
-        print("Error fetching RapidAPI movies:", e)
-        upcoming_movies = []  # only empty on error
-
     context = {
         "Movies": movies,
-        "Actors": actors,
-        "Directors": directors,
+        "categories": categories,
+        "selected_category": selected_category,
         "top_movies": top_movies,
-        "upcoming_movies": upcoming_movies,
     }
 
     return render(request, "home.html", context)
@@ -100,14 +112,24 @@ def register(request):
     return render(request, 'accounts:register_page')
 
 
+ # Make sure this is your Favorite model
+
 def user_profile(request):
     if 'userid' not in request.session:
         return redirect('login_page')
-    user=Users.objects.get(id=request.session['userid'])
-    data={
-        'user':user
+
+    user = Users.objects.get(id=request.session['userid'])
+
+    # Fetch the user's favorite movies
+    favorite_movies = Movies.objects.filter(favorite__user_id=user.id)
+
+    data = {
+        'user': user,
+        'favorite_movies': favorite_movies,  # pass favorites to template
     }
-    return render (request,'user_profile.html',data)
+
+    return render(request, 'user_profile.html', data)
+
 
 
 

@@ -3,43 +3,118 @@
 
 {% block content %}
 <style>
-    .movies-container {
+/* Container */
+.movies-container {
     display: flex;
-    flex-wrap: wrap; /* allows wrapping to new lines */
-    gap: 20px; /* space between movie cards */
-    justify-content: center; /* center horizontally */
-    align-items: flex-start;
-    padding: 20px;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    padding: 30px;
+    background: #121212;
 }
 
+/* Card */
 .movie-card {
-    width: 200px;
-    background: #1e1e1e;
-    color: white;
-    border-radius: 10px;
+    width: 220px;
+    background: #1f1f1f;
+    color: #fff;
+    border-radius: 12px;
     overflow: hidden;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .movie-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
 }
 
+/* Poster */
 .movie-card img {
     width: 100%;
-    height: 300px;
+    height: 320px;
     object-fit: cover;
 }
 
+/* Movie Info */
+.movie-card h5 {
+    margin: 10px 0 5px;
+    font-size: 1.1rem;
+}
+.movie-card small {
+    color: #bbb;
+}
+.movie-card p {
+    font-size: 0.85rem;
+    color: #ddd;
+    margin: 5px 10px 10px;
+}
+
+/* Badges */
+.badge {
+    margin: 2px 2px;
+    font-size: 0.7rem;
+}
+
+/* View button */
+.view-btn {
+    display: inline-block;
+    margin: 8px 0 12px;
+    padding: 6px 12px;
+    background: #ffc107;
+    color: #121212;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+.view-btn:hover {
+    background: #e0a800;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .movie-card { width: 45%; }
+}
+@media (max-width: 480px) {
+    .movie-card { width: 90%; }
+}
 </style>
-<div class="movies-container">
-    {% for movie in upcoming_movies %}
-        <div class="movie-card">
-            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-            <h5>{{ movie.title }}</h5>
-        </div>
-    {% endfor %}
+
+<div class="container">
+    <h2 class="text-center text-warning my-4">Upcoming Movies in {{ year }}</h2>
+
+    <div class="movies-container">
+        {% for movie in upcoming_movies %}
+            <div class="movie-card">
+                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                <h5>{{ movie.title }}</h5>
+                <small>{{ movie.release_date }}</small>
+                {% if movie.description %}
+                    <p>{{ movie.description|truncatechars:80 }}</p>
+                {% endif %}
+
+                {% if movie.actors.all %}
+                    <div>
+                        {% for actor in movie.actors.all %}
+                            <span class="badge bg-secondary">{{ actor.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if movie.directors.all %}
+                    <div>
+                        {% for director in movie.directors.all %}
+                            <span class="badge bg-info text-dark">{{ director.name }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        {% empty %}
+            <p class="text-light">No upcoming movies found.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

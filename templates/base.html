@@ -132,7 +132,6 @@
                         {% if request.session.userid %}
                     <a href="{% url 'accounts:user_profile' %}" class="btn btn-outline-info btn-sm me-2">{{ request.session.first_name }} {{ request.session.last_name }}</a>
                     <a href="{% url 'movies:logout' %}" class="btn btn-warning btn-sm">Logout</a>
-                    
                     {% else %}
                     <a href="{% url 'accounts:login_page' %}" class="btn btn-outline-info btn-sm me-2">Login</a>
                     <a href="{% url 'accounts:register_page' %}" class="btn btn-warning btn-sm">Register</a>

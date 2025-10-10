@@ -5,95 +5,122 @@
 
 {% block content %}
 <div class="container my-5 bg-dark text-light rounded shadow-lg p-5">
-  <div class="row">
-    <!-- Sidebar -->
-    <div class="col-md-3 border-end border-secondary text-center p-3 py-5">
-      <img class="rounded-circle mt-4 border border-warning" width="150px"
-           src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-      <h5 id="displayName" class="fw-bold text-warning mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
-      <p id="displayEmail" class="text-secondary">{{ user.email }}</p>
-    </div>
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 border-end border-secondary text-center p-3 py-5">
+            <img class="rounded-circle mt-4 border border-warning" width="150px"
+                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+            <h5 id="displayName" class="fw-bold text-warning mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
+            <p id="displayEmail" class="text-secondary">{{ user.email }}</p>
+        </div>
 
-    <!-- Profile Form -->
-    <div class="col-md-8">
-      <div class="p-3 py-5">
-        <h3 class="mb-4 text-warning">Profile Settings</h3>
-        <form id="editProfileForm">
-          {% csrf_token %}
-          <div class="row mt-2">
-            <div class="col-md-6 mb-3">
-              <label class="labels text-secondary">First Name</label>
-              <input type="text" class="form-control bg-dark text-light border-secondary"
-                     name="first_name" value="{{ user.first_name }}">
+        <!-- Profile Form -->
+        <div class="col-md-8">
+            <div class="p-3 py-5">
+                <h3 class="mb-4 text-warning">Profile Settings</h3>
+                <form id="editProfileForm">
+                    {% csrf_token %}
+                    <div class="row mt-2">
+                        <div class="col-md-6 mb-3">
+                            <label class="labels text-secondary">First Name</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary"
+                                name="first_name" value="{{ user.first_name }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="labels text-secondary">Last Name</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" name="last_name"
+                                value="{{ user.last_name }}">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mb-3">
+                            <label class="labels text-secondary">Email Address</label>
+                            <input type="email" class="form-control bg-dark text-light border-secondary" name="email"
+                                value="{{ user.email }}">
+                        </div>
+                    </div>
+                    <div id="message" class="mt-2 text-center"></div>
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-warning me-2" type="submit">Save Profile</button>
+                        <button id="deleteProfileBtn" class="btn btn-danger me-2">Delete Profile</button>
+                        <a href="{% url 'movies:dashboard' %}" class="btn btn-secondary">Dashboard</a>
+                    </div>
+                </form>
+                 <!-- Favorite Movies -->
+        <div class="mt-5">
+            <h3 class="text-warning mb-3">Your Favorite Movies</h3>
+            {% if favorite_movies %}
+            <div class="row g-3">
+                {% for movie in favorite_movies %}
+                <div class="col-md-3 col-sm-6 text-center">
+                    <a href="{% url 'movies:view_movie' movie.id %}">
+                        {% if movie.cover_img %}
+                        <img src="{{ movie.cover_img.url }}" class="img-fluid rounded shadow mb-2"
+                            style="height:200px; object-fit:cover;">
+                        {% else %}
+                        <img src="{% static 'images/RateUp-Logo.png' %}" class="img-fluid rounded shadow mb-2"
+                            style="height:200px; object-fit:cover;">
+                        {% endif %}
+                        <p class="text-light">{{ movie.title }}</p>
+                    </a>
+                </div>
+                {% endfor %}
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="labels text-secondary">Last Name</label>
-              <input type="text" class="form-control bg-dark text-light border-secondary"
-                     name="last_name" value="{{ user.last_name }}">
+            {% else %}
+            <p class="text-secondary">You have no favorite movies yet.</p>
+            {% endif %}
+        </div>
             </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-12 mb-3">
-              <label class="labels text-secondary">Email Address</label>
-              <input type="email" class="form-control bg-dark text-light border-secondary"
-                     name="email" value="{{ user.email }}">
-            </div>
-          </div>
-          <div id="message" class="mt-2 text-center"></div>
-          <div class="mt-4 text-center">
-            <button class="btn btn-warning me-2" type="submit">Save Profile</button>
-            <button id="deleteProfileBtn" class="btn btn-danger me-2">Delete Profile</button>
-            <a href="{% url 'movies:dashboard' %}" class="btn btn-secondary">Dashboard</a>
-          </div>
-        </form>
-      </div>
+        </div>
+
+
     </div>
-  </div>
 </div>
+
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-const csrftoken = '{{ csrf_token }}';
+    const csrftoken = '{{ csrf_token }}';
 
-// Edit Profile
-$("#editProfileForm").submit(function(e){
-    e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "{% url 'accounts:edit_profile' %}",
-        data: $(this).serialize(),
-        headers: {'X-CSRFToken': csrftoken},
-        success: function(response){
-            if(response.status === "success"){
-                $("#message").text("Profile updated successfully!").css("color","lightgreen");
-                $("#displayName").text(response.first_name + " " + response.last_name);
-                $("#displayEmail").text(response.email);
-            } else {
-                $("#message").text(response.message).css("color","red");
-            }
-        }
-    });
-});
-
-// Delete Profile
-$("#deleteProfileBtn").click(function(){
-    if(confirm("Are you sure you want to delete your profile?")){
+    // Edit Profile
+    $("#editProfileForm").submit(function (e) {
+        e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "{% url 'accounts:delete_profile' %}",
-            headers: {'X-CSRFToken': csrftoken},
-            success: function(response){
-                if(response.status === "success"){
-                    alert("Profile deleted!");
-                    window.location.href = "/";
+            url: "{% url 'accounts:edit_profile' %}",
+            data: $(this).serialize(),
+            headers: { 'X-CSRFToken': csrftoken },
+            success: function (response) {
+                if (response.status === "success") {
+                    $("#message").text("Profile updated successfully!").css("color", "lightgreen");
+                    $("#displayName").text(response.first_name + " " + response.last_name);
+                    $("#displayEmail").text(response.email);
                 } else {
-                    alert(response.message);
+                    $("#message").text(response.message).css("color", "red");
                 }
             }
         });
-    }
-});
+    });
+
+    // Delete Profile
+    $("#deleteProfileBtn").click(function () {
+        if (confirm("Are you sure you want to delete your profile?")) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'accounts:delete_profile' %}",
+                headers: { 'X-CSRFToken': csrftoken },
+                success: function (response) {
+                    if (response.status === "success") {
+                        alert("Profile deleted!");
+                        window.location.href = "/";
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        }
+    });
 </script>
 {% endblock %}
 

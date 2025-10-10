@@ -18,12 +18,24 @@
 
         <!-- Details -->
         <div class="col-md-8">
-            <h2 class="text-warning">{{ movie.title }} <a href="{% url 'reviews:movie_reviews' movie.id%}"><button
-                        type="button" class="btn btn-outline-warning btn-lg">Rate Now</button></a>
+            <h2 class="text-warning">
+                {{ movie.title }}
+                <a href="{% url 'reviews:movie_reviews' movie.id %}">
+                    <button type="button" class="btn btn-outline-warning btn-lg">Rate Now</button>
+                </a>
+
+
+                {% if movie.id in user_favorites %}
+                <a href="{% url 'movies:toggle_favorite' movie.id %}" class="btn btn-danger btn-lg ms-2">💖 Remove from
+                    Favorites</a>
+                {% else %}
+                <a href="{% url 'movies:toggle_favorite' movie.id %}" class="btn btn-outline-warning btn-lg ms-2">🤍 Add
+                    to Favorites</a>
+                {% endif %}
             </h2>
+
             <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
             <p>{{ movie.description }}</p>
-
             <p><strong>Duration:</strong> {{ movie.duration }} minutes</p>
 
             {% if movie.categories.all %}
@@ -49,44 +61,45 @@
                 {% endfor %}
             </p>
             {% endif %}
-
-
-
         </div>
+
     </div>
 
-   <!-- Reviews -->
-<div class="reviews mt-5 text-dark">
-    <h3 class="text-warning mb-4">Reviews</h3>
-    <div class="row g-3">
-        {% for review in movie.reviews.all %}
-        <div class="col-12">
-            <div class="p-3 rounded-4 shadow-sm review-card" style="background: linear-gradient(135deg, #ffffff, #e0e0ff); border-left: 8px solid #ffc107;">
-                <div class="d-flex align-items-center mb-2">
-                    <!-- Avatar -->
-                    <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-3" style="width:50px; height:50px; font-weight:bold; font-size:18px;">
-                        {{ review.user.first_name|slice:":1" }}{{ review.user.last_name|slice:":1" }}
+    <!-- Reviews -->
+    <div class="reviews mt-5 text-dark">
+        <h3 class="text-warning mb-4">Reviews</h3>
+        <div class="row g-3">
+            {% for review in movie.reviews.all %}
+            <div class="col-12">
+                <div class="p-3 rounded-4 shadow-sm review-card"
+                    style="background: linear-gradient(135deg, #ffffff, #e0e0ff); border-left: 8px solid #ffc107;">
+                    <div class="d-flex align-items-center mb-2">
+                        <!-- Avatar -->
+                        <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-3"
+                            style="width:50px; height:50px; font-weight:bold; font-size:18px;">
+                            {{ review.user.first_name|slice:":1" }}{{ review.user.last_name|slice:":1" }}
+                        </div>
+
+                        <!-- User Info -->
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0 fw-bold">{{ review.user.first_name }} {{ review.user.last_name }}</h6>
+                            <small class="text-muted">Posted on {{ review.created_at|date:"M d, Y" }}</small>
+                        </div>
+
+                        <!-- Rating -->
+                        <span class="badge bg-warning text-dark ms-3">{{ review.rating }}/5 ⭐</span>
                     </div>
 
-                    <!-- User Info -->
-                    <div class="flex-grow-1">
-                        <h6 class="mb-0 fw-bold">{{ review.user.first_name }} {{ review.user.last_name }}</h6>
-                        <small class="text-muted">Posted on {{ review.created_at|date:"M d, Y" }}</small>
-                    </div>
-
-                    <!-- Rating -->
-                    <span class="badge bg-warning text-dark ms-3">{{ review.rating }}/5 ⭐</span>
+                    <!-- Comment -->
+                    <p class="mb-0">{{ review.comment }}</p>
                 </div>
-
-                <!-- Comment -->
-                <p class="mb-0">{{ review.comment }}</p>
             </div>
+            {% empty %}
+            <p class="text-light">No reviews yet. Be the first!</p>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p class="text-light">No reviews yet. Be the first!</p>
-        {% endfor %}
     </div>
-</div>
+    
 
 
 </div>
