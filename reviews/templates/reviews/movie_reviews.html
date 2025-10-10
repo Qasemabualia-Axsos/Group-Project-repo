@@ -1,68 +1,80 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Reviews{% endblock %}
+
 {% block content %}
 <div class="container py-5">
 
-
-  <div class="text-center mb-5 p-4 rounded shadow bg-white">
+  <!-- Movie Header -->
+  <div class="text-center mb-5 p-4 rounded-4 shadow-lg bg-black bg-opacity-75">
     <img src="{{ movie.cover_img.url }}" alt="{{ movie.title }}"
-         class="img-fluid rounded mb-3"
+         class="img-fluid rounded-3 mb-3"
          style="max-height: 300px; object-fit: cover;">
-    <h2 class="fw-bold text-dark">{{ movie.title }}</h2>
-    <p class="text-muted mb-2">{{ movie.description }}</p>
-    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+    <h2 class="fw-bold text-warning">{{ movie.title }}</h2>
+    <p class="text-light mb-2">{{ movie.description }}</p>
+    <p class="text-secondary"><strong>Release Date:</strong> {{ movie.release_date }}</p>
     {% if movie.trailer %}
-    <a href="{{ movie.trailer }}" target="_blank" class="btn btn-watch">🎥 Watch Trailer</a>
+    <a href="{{ movie.trailer }}" target="_blank" class="btn btn-warning text-dark fw-semibold rounded-3">
+      🎥 Watch Trailer
+    </a>
     {% endif %}
   </div>
 
-  
+  <!-- Add Review Form -->
   {% if request.session.userid %}
-  <div class="card border-0 shadow-sm mb-5">
-    <div class="card-body p-4">
-      <h4 class="card-title text-center mb-4 text-primary fw-semibold">Leave a Review</h4>
+  <div class="card bg-dark bg-opacity-75 border-0 shadow-lg mb-5 p-4">
+    <h4 class="text-warning fw-semibold text-center mb-4">Leave a Review</h4>
 
-      <form id="reviewForm" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="review_id" value="">
-        <input type="hidden" name="action" value="add">
+    <form id="reviewForm" method="POST" action="{% url 'reviews:movie_reviews' movie.id %}">
+      {% csrf_token %}
+      <input type="hidden" name="review_id" value="">
+      <input type="hidden" name="action" value="add">
 
-        <div class="mb-4 text-center">
-          <label class="form-label fw-semibold d-block mb-2">Your Rating:</label>
-          <div class="star-rating mx-auto">
-            {% for i in "54321"|make_list %}
-            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" />
-            <label for="star{{ i }}" title="{{ i }} stars">★</label>
-            {% endfor %}
-          </div>
+      <div class="mb-3 text-center">
+        <label class="form-label fw-semibold text-light d-block mb-2">Your Rating:</label>
+        <div class="star-rating mx-auto">
+          {% for i in "54321"|make_list %}
+          <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}">
+          <label for="star{{ i }}" title="{{ i }} stars">★</label>
+          {% endfor %}
         </div>
+      </div>
 
-        <div class="mb-4">
-          <label for="comment" class="form-label fw-semibold">Comment</label>
-          <textarea class="form-control shadow-sm rounded-3" id="comment" name="comment"
-                    rows="4" placeholder="Share your thoughts..."></textarea>
-        </div>
+      <div class="mb-4">
+        <textarea 
+          name="comment" 
+          class="form-control bg-black bg-opacity-50 text-light border-warning rounded-3 shadow-sm" 
+          placeholder="Share your thoughts about this movie..." 
+          rows="3" 
+          required
+        ></textarea>
+      </div>
 
-        <div class="text-center">
-          <button type="submit" class="btn btn-submit px-4 py-2 rounded-3">Submit Review</button>
-        </div>
-      </form>
-    </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-warning text-dark fw-semibold px-4 py-2 rounded-3">
+          Add Review
+        </button>
+      </div>
+    </form>
   </div>
   {% else %}
-    <p class="text-center">
-      <a href="{% url 'accounts:login_page' %}" class="text-primary fw-semibold">Log in</a> to leave a review.
-    </p>
+  <p class="text-center text-light">
+    <a href="{% url 'accounts:login_page' %}" class="text-warning fw-semibold">Log in</a> to leave a review.
+  </p>
   {% endif %}
 
-  
-  <h4 class="text-center text-primary fw-bold mb-4">All Reviews</h4>
-  <div class="row g-3" id="reviewsContainer">
-    {% include 'reviews/reviews_list.html' %}
+  <!-- All Reviews Section -->
+  <div class="reviews-section p-4 rounded-4 bg-black bg-opacity-75 shadow-lg">
+    <h4 class="text-warning fw-bold mb-4 text-center">All Reviews</h4>
+    <div class="row g-4" id="reviewsContainer">
+      {% include 'reviews/reviews_list.html' %}
+    </div>
   </div>
+
 </div>
 
+<!-- AJAX Script -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#reviewForm");
@@ -71,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!form) return;
 
-
+  // Handle Add / Update Review
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const formData = new FormData(form);
@@ -89,17 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
         reviewsContainer.innerHTML = data.html;
         form.reset();
         form.querySelector("input[name='review_id']").value = "";
-        alert(data.message);
-      } else {
-        alert(data.message);
       }
+      alert(data.message);
     });
   });
 
   // Handle Delete or Edit Review
   reviewsContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("delete-review")) {
-      const reviewId = e.target.dataset.id;
+    if (e.target.closest(".delete-review")) {
+      const reviewId = e.target.closest(".delete-review").dataset.id;
       const formData = new FormData();
       formData.append("action", "delete");
       formData.append("review_id", reviewId);
@@ -113,38 +123,45 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         if (data.success) {
           reviewsContainer.innerHTML = data.html;
-          alert("Review deleted successfully!");
         }
+        alert(data.message);
       });
     }
 
-    if (e.target.classList.contains("edit-review")) {
-      const btn = e.target;
+    if (e.target.closest(".edit-review")) {
+      const btn = e.target.closest(".edit-review");
       document.querySelector("input[name='review_id']").value = btn.dataset.id;
       document.querySelector(`#star${btn.dataset.rating}`).checked = true;
-      document.querySelector("#comment").value = btn.dataset.comment;
+      document.querySelector("textarea[name='comment']").value = btn.dataset.comment;
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   });
 });
 </script>
 
+<!-- Styling -->
 <style>
 :root {
-  --primary: #0056b3;
-  --secondary: #f1c40f;
-  --bg-light: #f8f9fa;
-  --text-dark: #333333;
+  --yellow: #f5c518;
+  --dark-bg: #0d0d0d;
+  --gray-bg: rgba(40, 40, 40, 0.95);
+  --text-gray: #cfcfcf;
+  --comment-bg: #1a1a1a;
+  --comment-text: #000000; 
 }
 
 body {
-  background-color: var(--bg-light);
+  background-color: var(--dark-bg);
+  color: var(--text-gray);
 }
 
-.card {
-  background-color: #ffffff;
-  border-radius: 15px;
+
+textarea::placeholder {
+  color: white !important;
+  opacity: 0.8;
 }
+
+/* Stars */
 .star-rating {
   direction: rtl;
   display: inline-flex;
@@ -155,101 +172,85 @@ body {
 }
 .star-rating label {
   font-size: 2rem;
-  color: #ccc;
+  color: #555;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
 }
 .star-rating input:checked ~ label,
 .star-rating label:hover,
 .star-rating label:hover ~ label {
-  color: var(--secondary);
+  color: var(--yellow);
 }
 
-.btn-watch {
-  background: linear-gradient(135deg, var(--secondary) 0%, #ffde59 100%);
-  color: #333;
-  border: none;
-  font-weight: 600;
-  border-radius: 8px;
-  padding: 8px 16px;
-  transition: all 0.3s ease;
+/* Reviews Section */
+.reviews-section {
+  background: var(--gray-bg);
+  border: 1px solid rgba(245, 197, 24, 0.3);
 }
-.btn-watch:hover {
-  background: linear-gradient(135deg, #ffcf00 0%, var(--secondary) 100%);
-  transform: translateY(-2px);
-}
-
-.btn-submit {
-  background: linear-gradient(135deg, var(--primary) 0%, #007bff 100%);
-  color: white;
-  font-weight: 600;
-  border: none;
-  transition: all 0.3s ease;
-}
-.btn-submit:hover {
-  background: linear-gradient(135deg, #003f87 0%, var(--primary) 100%);
-  transform: translateY(-2px);
-}
-
-.btn-action, .btn-delete {
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-weight: 600;
-  border: none;
-  transition: all 0.3s ease;
-}
-
-.btn-action {
-  background: linear-gradient(135deg, var(--primary) 0%, #007bff 100%);
-  color: white;
-  box-shadow: 0 2px 6px rgba(0, 91, 187, 0.3);
-}
-.btn-action:hover {
-  background: linear-gradient(135deg, #003f87 0%, #0056b3 100%);
-  transform: translateY(-2px);
-}
-
-.btn-delete {
-  background: linear-gradient(135deg, #ff5c5c 0%, #ff7878 100%);
-  color: white;
-  box-shadow: 0 2px 6px rgba(255, 90, 90, 0.3);
-}
-.btn-delete:hover {
-  background: linear-gradient(135deg, #e04a4a 0%, #ff5c5c 100%);
-  transform: translateY(-2px);
-}
-
 .review-card {
-  border-left: 5px solid var(--primary);
-  background-color: #ffffff;
+  background: var(--comment-bg);
+  border: 1px solid rgba(245, 197, 24, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+.review-card:hover {
+  transform: translateY(-3px);
 }
 .username {
-  color: var(--primary);
+  color: var(--yellow);
   font-weight: 600;
+  font-size: 1.1rem;
 }
 .comment-text {
-  color: var(--text-dark);
+  color: var(--comment-text); 
   font-size: 1rem;
   line-height: 1.6;
+  margin-top: 8px;
+}
+
+/* Buttons */
+.btn-warning {
+  background-color: var(--yellow);
+  border: none;
+  transition: all 0.3s ease;
+}
+.btn-warning:hover {
+  background-color: #ffd633;
+  transform: translateY(-2px);
+}
+
+/* Edit / Delete buttons */
+.review-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(245, 197, 24, 0.08);
+  border: 1px solid rgba(245, 197, 24, 0.3);
+  color: var(--yellow);
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.action-btn:hover {
+  background: var(--yellow);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 0 8px rgba(245, 197, 24, 0.3);
+}
+.action-btn i {
+  font-size: 1rem;
 }
 </style>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
