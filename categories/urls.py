@@ -3,8 +3,10 @@ from . import views
 
 app_name = 'categories'
 urlpatterns = [
-    path('', views.categories_page, name='page'), 
+    path('', views.categories_page, name='categories_page'),
     # API (AJAX/JSON)
+    path('<int:category_id>/', views.category_detail, name='category_detail'),
+
     path('api/list/', views.api_list, name='api_list'),
     path('api/create/', views.api_create, name='api_create'),
     path('api/update/<int:pk>/', views.api_update, name='api_update'),

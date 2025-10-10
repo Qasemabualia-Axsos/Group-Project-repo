@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-warning mb-4">{{ category.name }} Movies</h2>
+
+<div class="row g-4">
+    {% for movie in movies %}
+    <div class="col-6 col-md-3">
+        <div class="card bg-dark text-light h-100">
+            {% if movie.cover_img %}
+<a href="{% url 'movies:view_movie' movie.id %}">
+    <img src="{{ movie.cover_img.url }}" class="d-block w-100" alt="{{ movie.title }}"
+        style="max-height:500px; object-fit:cover;">
+</a>
+{% else %}
+<div class="bg-secondary d-flex align-items-center justify-content-center" style="height:200px;">
+    <i class="bi bi-image text-light fs-1"></i>
+</div>
+{% endif %}
+
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ movie.title }}</h5>
+                <p class="card-text">{{ movie.description|default:"No description" }}</p>
+                <a href="{% url 'movies:view_movie' movie.id %}" class="btn btn-outline-info btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-secondary">No movies in this category yet.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
