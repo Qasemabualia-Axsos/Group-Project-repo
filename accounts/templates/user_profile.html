@@ -4,97 +4,182 @@
 {% block title %}My Profile{% endblock %}
 
 {% block content %}
-<div class="container my-5 bg-dark text-light rounded shadow-lg p-5">
-  <div class="row">
-    <!-- Sidebar -->
-    <div class="col-md-3 border-end border-secondary text-center p-3 py-5">
-      <img class="rounded-circle mt-4 border border-warning" width="150px"
-           src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-      <h5 id="displayName" class="fw-bold text-warning mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
-      <p id="displayEmail" class="text-secondary">{{ user.email }}</p>
-    </div>
+<div class="container my-5 bg-black bg-opacity-75 text-light rounded-4 shadow-lg p-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 border-end border-secondary text-center p-4">
+            <img class="rounded-circle mt-4 border border-warning shadow" width="150px"
+                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+            <h5 id="displayName" class="fw-bold text-warning mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
+            <p id="displayEmail" class="text-secondary">{{ user.email }}</p>
+        </div>
 
-    <!-- Profile Form -->
-    <div class="col-md-8">
-      <div class="p-3 py-5">
-        <h3 class="mb-4 text-warning">Profile Settings</h3>
-        <form id="editProfileForm">
-          {% csrf_token %}
-          <div class="row mt-2">
-            <div class="col-md-6 mb-3">
-              <label class="labels text-secondary">First Name</label>
-              <input type="text" class="form-control bg-dark text-light border-secondary"
-                     name="first_name" value="{{ user.first_name }}">
+        <!-- Profile Form -->
+        <div class="col-md-9">
+            <div class="p-3 py-4">
+                <h3 class="mb-4 text-warning fw-bold border-bottom border-warning pb-2">Profile Settings</h3>
+
+                <form id="editProfileForm" class="mb-4">
+                    {% csrf_token %}
+                    <div class="row mt-2">
+                        <div class="col-md-6 mb-3">
+                            <label class="labels text-secondary">First Name</label>
+                            <input type="text"
+                                class="form-control bg-dark text-light border border-secondary rounded-3 shadow-sm"
+                                name="first_name" value="{{ user.first_name }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="labels text-secondary">Last Name</label>
+                            <input type="text"
+                                class="form-control bg-dark text-light border border-secondary rounded-3 shadow-sm"
+                                name="last_name" value="{{ user.last_name }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="labels text-secondary">Email Address</label>
+                        <input type="email"
+                            class="form-control bg-dark text-light border border-secondary rounded-3 shadow-sm"
+                            name="email" value="{{ user.email }}">
+                    </div>
+                    <div id="message" class="mt-2 text-center fw-semibold"></div>
+                    <div class="mt-4 text-center">
+                        <button class="btn btn-warning fw-semibold me-2 px-4 shadow-sm" type="submit">
+                            <i class="bi bi-save"></i> Save Profile
+                        </button>
+                        <button id="deleteProfileBtn" type="button"
+                            class="btn btn-outline-danger fw-semibold me-2 px-4 shadow-sm">
+                            <i class="bi bi-trash"></i> Delete Profile
+                        </button>
+                        <a href="{% url 'movies:dashboard' %}"
+                            class="btn btn-outline-secondary fw-semibold px-4 shadow-sm">
+                            <i class="bi bi-arrow-left"></i> Dashboard
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Favorite Movies -->
+                <div class="mt-5">
+                    <h3 class="text-warning fw-bold mb-3 border-bottom border-warning pb-2">Your Favorite Movies</h3>
+                    {% if favorite_movies %}
+                    <div class="row g-4">
+                        {% for movie in favorite_movies %}
+                        <div class="col-md-3 col-sm-6 text-center">
+                            <div class="card bg-dark border-0 shadow-sm h-100 rounded-4 hover-scale">
+                                <a href="{% url 'movies:view_movie' movie.id %}">
+                                    {% if movie.cover_img %}
+                                    <img src="{{ movie.cover_img.url }}" class="card-img-top rounded-top-4"
+                                        style="height:220px; object-fit:cover;">
+                                    {% else %}
+                                    <img src="{% static 'images/RateUp-Logo.png' %}" class="card-img-top rounded-top-4"
+                                        style="height:220px; object-fit:cover;">
+                                    {% endif %}
+                                </a>
+                                <div class="card-body text-center">
+                                    <p class="card-title text-warning fw-semibold">{{ movie.title }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-secondary">You have no favorite movies yet.</p>
+                    {% endif %}
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-              <label class="labels text-secondary">Last Name</label>
-              <input type="text" class="form-control bg-dark text-light border-secondary"
-                     name="last_name" value="{{ user.last_name }}">
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-12 mb-3">
-              <label class="labels text-secondary">Email Address</label>
-              <input type="email" class="form-control bg-dark text-light border-secondary"
-                     name="email" value="{{ user.email }}">
-            </div>
-          </div>
-          <div id="message" class="mt-2 text-center"></div>
-          <div class="mt-4 text-center">
-            <button class="btn btn-warning me-2" type="submit">Save Profile</button>
-            <button id="deleteProfileBtn" class="btn btn-danger me-2">Delete Profile</button>
-            <a href="{% url 'movies:dashboard' %}" class="btn btn-secondary">Dashboard</a>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- jQuery -->
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-const csrftoken = '{{ csrf_token }}';
+    const csrftoken = '{{ csrf_token }}';
 
-// Edit Profile
-$("#editProfileForm").submit(function(e){
-    e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "{% url 'accounts:edit_profile' %}",
-        data: $(this).serialize(),
-        headers: {'X-CSRFToken': csrftoken},
-        success: function(response){
-            if(response.status === "success"){
-                $("#message").text("Profile updated successfully!").css("color","lightgreen");
-                $("#displayName").text(response.first_name + " " + response.last_name);
-                $("#displayEmail").text(response.email);
-            } else {
-                $("#message").text(response.message).css("color","red");
-            }
-        }
-    });
-});
-
-// Delete Profile
-$("#deleteProfileBtn").click(function(){
-    if(confirm("Are you sure you want to delete your profile?")){
+    // Edit Profile
+    $("#editProfileForm").submit(function (e) {
+        e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "{% url 'accounts:delete_profile' %}",
-            headers: {'X-CSRFToken': csrftoken},
-            success: function(response){
-                if(response.status === "success"){
-                    alert("Profile deleted!");
-                    window.location.href = "/";
+            url: "{% url 'accounts:edit_profile' %}",
+            data: $(this).serialize(),
+            headers: { 'X-CSRFToken': csrftoken },
+            success: function (response) {
+                if (response.status === "success") {
+                    $("#message").text("Profile updated successfully!")
+                        .css("color", "#f1c40f");
+                    $("#displayName").text(response.first_name + " " + response.last_name);
+                    $("#displayEmail").text(response.email);
                 } else {
-                    alert(response.message);
+                    $("#message").text(response.message).css("color", "red");
                 }
             }
         });
-    }
-});
+    });
+
+    // Delete Profile
+    $("#deleteProfileBtn").click(function () {
+        if (confirm("Are you sure you want to delete your profile?")) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'accounts:delete_profile' %}",
+                headers: { 'X-CSRFToken': csrftoken },
+                success: function (response) {
+                    if (response.status === "success") {
+                        alert("Profile deleted!");
+                        window.location.href = "/";
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        }
+    });
 </script>
+
+<style>
+    /* === PROFILE PAGE STYLE === */
+    .hover-scale {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-scale:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 20px rgba(241, 196, 15, 0.2);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+        color: #000;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-warning:hover {
+        background: linear-gradient(135deg, #ffdf40, #f1c40f);
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-danger {
+        color: #ff6b6b;
+        border-color: #ff6b6b;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #ff6b6b;
+        color: #fff;
+    }
+
+    .btn-outline-secondary {
+        color: #bbb;
+        border-color: #666;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #444;
+        color: #f1c40f;
+        border-color: #f1c40f;
+    }
+</style>
 {% endblock %}
 
 

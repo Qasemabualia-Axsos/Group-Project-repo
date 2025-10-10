@@ -87,9 +87,9 @@ WSGI_APPLICATION = 'Group_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'rateup',
+        'NAME': 'rateup_db',
         'USER': 'root',
-        'PASSWORD':'Speed-123',
+        'PASSWORD':'190275@11Jqq',
         'HOST':'127.0.0.1',
         'PORT':'3306'
     }
@@ -131,6 +131,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # add this
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")    # for collectstatic
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -138,3 +141,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = "accounts.Users"

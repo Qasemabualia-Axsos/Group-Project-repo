@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Cinematic Section Card */
+    .section-card {
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: radial-gradient(circle at top left, #111 0%, #0d0d0d 100%);
+        transition: all 0.4s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .section-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 200, 255, 0.25);
+    }
+
+    /* Avatar Glow for Icons */
+    .avatar-glow {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 15px auto;
+        transition: all 0.4s ease;
+        color: #111;
+    }
+
+    .avatar-glow:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 35px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Divider Dot */
+    .divider-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin: 3rem auto;
+        background: linear-gradient(135deg, #00c6ff, #ffcc00);
+        box-shadow: 0 0 20px rgba(255, 200, 50, 0.6);
+    }
+
+    /* Form Styling */
+    .form-control {
+        background: #111;
+        border: 1px solid rgba(0, 200, 255, 0.4);
+        color: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #ffcc00;
+        box-shadow: 0 0 15px rgba(255, 200, 50, 0.5);
+        background: #0d0d0d;
+    }
+
+    /* Social Icons Glow */
+    .social-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: 0.3s ease;
+        color: #fff;
+    }
+
+    .social-icon:hover {
+        transform: scale(1.15);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Form Styling */
+    .form-control {
+        background: #111;
+        border: 1px solid rgba(0, 200, 255, 0.4);
+        color: #fff;
+        /* makes user text white */
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+        /* white placeholder with slight transparency */
+    }
+
+    .form-control:focus {
+        border-color: #ffcc00;
+        box-shadow: 0 0 15px rgba(255, 200, 50, 0.5);
+        background: #0d0d0d;
+        color: #fff;
+        /* keep input text white on focus */
+    }
+</style>
+
+<!-- 🌟 Hero Section -->
+<section class="py-5 text-center text-light my-5 section-card"
+    style="background: linear-gradient(135deg, #0d0d0d, #1a1a1a);">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-warning mb-3">Contact Us</h1>
+        <p class="lead text-secondary col-md-8 mx-auto">
+            Got questions, feedback, or ideas? Our team is always here to connect with you.
+        </p>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 📞 Contact Info -->
+<section class="py-5 text-light section-card">
+    <div class="container text-center">
+        <h2 class="text-warning mb-4">Our Contact Information</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-4 bg-black rounded shadow-sm">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#ffcc00,#ff8800);">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <h6 class="fw-bold text-info mt-3">Email</h6>
+                    <p class="text-secondary">support@rateup.com</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-black rounded shadow-sm">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#00c6ff,#0072ff);">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <h6 class="fw-bold text-info mt-3">Phone</h6>
+                    <p class="text-secondary">+972 00000000</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-black rounded shadow-sm">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#ff7eb3,#ff758c);">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <h6 class="fw-bold text-info mt-3">Location</h6>
+                    <p class="text-secondary">Palestine</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- ✉️ Contact Form -->
+<section class="py-5 text-light section-card">
+    <div class="container">
+        <h2 class="text-warning text-center mb-5">Send Us a Message</h2>
+        <form class="col-md-8 mx-auto">
+            <div class="mb-3">
+                <label class="form-label text-info">Your Name</label>
+                <input type="text" class="form-control shadow-sm" placeholder="Enter your full name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-info">Email Address</label>
+                <input type="email" class="form-control shadow-sm" placeholder="name@example.com">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-info">Message</label>
+                <textarea rows="5" class="form-control shadow-sm" placeholder="Write your message..."></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-warning btn-lg shadow-lg">
+                    <i class="bi bi-send-fill"></i> Send Message
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 🌐 Social Media -->
+<section class="py-5 text-light section-card">
+    <div class="container text-center">
+        <h2 class="text-warning mb-4">Follow Us</h2>
+        <p class="text-secondary">Stay updated with the latest movie trends and RateUp news.</p>
+        <div class="d-flex justify-content-center gap-4 mt-3">
+            <a href="#" class="social-icon" style="background: linear-gradient(135deg,#3b5998,#4a69ad);"><i
+                    class="bi bi-facebook"></i></a>
+            <a href="#" class="social-icon" style="background: linear-gradient(135deg,#1da1f2,#0d8ddb);"><i
+                    class="bi bi-twitter-x"></i></a>
+            <a href="#" class="social-icon" style="background: linear-gradient(135deg,#0077b5,#005582);"><i
+                    class="bi bi-linkedin"></i></a>
+            <a href="#" class="social-icon" style="background: linear-gradient(135deg,#e1306c,#ff758c);"><i
+                    class="bi bi-instagram"></i></a>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 🚀 Call To Action -->
+<section class="py-5 text-center text-light my-5 section-card"
+    style="background: linear-gradient(135deg, #1a1a1a, #0d0d0d);">
+    <div class="container">
+        <h2 class="text-warning mb-3">Let's Build Together</h2>
+        <p class="text-secondary">Join the RateUp community and shape the future of movie discovery.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'accounts:register_page' %}" class="btn btn-warning btn-lg shadow">
+                <i class="bi bi-box-arrow-in-right"></i> Sign Up Free
+            </a>
+            <a href="{% url 'movies:home' %}" class="btn btn-outline-info btn-lg shadow">
+                <i class="bi bi-info-circle"></i> Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

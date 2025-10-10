@@ -83,3 +83,9 @@ def ajax_search_movies(request):
             'cover': movie.cover_img.url,
         })
     return JsonResponse({'movies': results})
+
+def about(request):
+    return render(request, "about.html")
+
+def contact(request):
+    return render(request, "contact.html")

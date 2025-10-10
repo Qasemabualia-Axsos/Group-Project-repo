@@ -1,255 +1,302 @@
-{% extends "base.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-<div class="container py-5">
+<head>
+  <meta charset="UTF-8">
+  <title>RateUp - Movie Review Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-  <div class="text-center mb-5 p-4 rounded shadow bg-white">
-    <img src="{{ movie.cover_img.url }}" alt="{{ movie.title }}"
-         class="img-fluid rounded mb-3"
-         style="max-height: 300px; object-fit: cover;">
-    <h2 class="fw-bold text-dark">{{ movie.title }}</h2>
-    <p class="text-muted mb-2">{{ movie.description }}</p>
-    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
-    {% if movie.trailer %}
-    <a href="{{ movie.trailer }}" target="_blank" class="btn btn-watch">🎥 Watch Trailer</a>
+  <style>
+    /* ======== GLOBAL ======== */
+    body {
+      background: radial-gradient(circle at top left, #0e0e0e, #050505);
+      color: #f1f1f1;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ======== NAVBAR ======== */
+    .navbar {
+      background-color: #121212;
+      border-bottom: 2px solid #ffc107;
+      padding: 0.8rem 1.5rem;
+    }
+
+    .navbar-brand {
+      color: #ffc107 !important;
+      font-weight: 600;
+      font-size: 1.6rem;
+      text-shadow: 0 0 8px rgba(255, 193, 7, 0.5);
+    }
+
+    .nav-link {
+      color: #ddd !important;
+      margin-right: 1rem;
+      transition: 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #ffc107 !important;
+      text-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+    }
+
+    /* ======== AUTH BUTTONS ======== */
+    .btn-pill {
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .btn-pill:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 193, 7, 0.6);
+    }
+
+    /* ======== SEARCH BAR ======== */
+    .search-wrapper {
+      position: relative;
+      width: 45%;
+    }
+
+    .search-input {
+      border-radius: 25px;
+      padding: 10px 20px;
+      background-color: #1a1a1a;
+      border: 1px solid #ffc107;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .search-input::placeholder {
+      color: #bbb;
+    }
+
+    .search-input:focus {
+      background-color: #222;
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.7);
+      border-color: #ffc107;
+      outline: none;
+      color: #ffffff
+    }
+
+    /* ======== SEARCH RESULTS ======== */
+    .search-results {
+      position: absolute;
+      top: 110%;
+      left: 0;
+      right: 0;
+      background: #1a1a1a;
+      border: 1px solid #ffc107;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      padding: 8px;
+    }
+
+    .result-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      background: #181818;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .result-card:hover {
+      background: rgba(255, 193, 7, 0.1);
+      transform: scale(1.02);
+    }
+
+    .result-card img {
+      width: 45px;
+      height: 45px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 2px solid #ffc107;
+    }
+
+    .result-card a {
+      color: #f1f1f1;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .result-card a:hover {
+      color: #ffc107;
+    }
+
+    /* ======== FOOTER ======== */
+    footer {
+      background-color: #111;
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #222;
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: #ffc107;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    footer .social-icon {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #1a1a1a;
+      margin: 0 6px;
+      transition: 0.3s ease;
+      color: #ffc107;
+    }
+
+    footer .social-icon:hover {
+      background: #ffc107;
+      color: #111;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><i class="bi bi-film"></i> RateUp</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left Nav -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'movies:dashboard' %}">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'api:api' %}">
+              <i class="bi bi-fire"></i> Upcoming
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="bi bi-grid"></i> Categories
+            </a>
+          </li>
+        </ul>
+
+        <!-- Search -->
+        <form class="search-wrapper mx-auto">
+          <input type="search" id="searchInput" class="form-control search-input"
+            placeholder="🔍 Search movies, actors, or directors..." aria-label="Search">
+          <div id="searchResults" class="search-results"></div>
+        </form>
+
+        <!-- Auth -->
+        <div class="d-flex align-items-center ms-3">
+          {% if request.session.userid %}
+          <a href="{% url 'accounts:user_profile' %}" class="btn btn-outline-warning btn-sm btn-pill me-2">
+            <i class="bi bi-person-circle"></i> Profile
+          </a>
+          <a href="{% url 'movies:logout' %}" class="btn btn-warning btn-sm btn-pill">Logout</a>
+          {% else %}
+          <a href="{% url 'accounts:login_page' %}" class="btn btn-outline-warning btn-sm btn-pill me-2">Login</a>
+          <a href="{% url 'accounts:register_page' %}" class="btn btn-warning btn-sm btn-pill">Register</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Alerts -->
+  <div class="container mt-3">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info">{{ message }}</div>
+    {% endfor %}
     {% endif %}
   </div>
 
-  
-  {% if request.session.userid %}
-  <div class="card border-0 shadow-sm mb-5">
-    <div class="card-body p-4">
-      <h4 class="card-title text-center mb-4 text-primary fw-semibold">Leave a Review</h4>
+  <!-- Content -->
+  <main class="container mt-4">
+    {% block content %}{% endblock %}
+  </main>
 
-      <form id="reviewForm" method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="review_id" value="">
-        <input type="hidden" name="action" value="add">
-
-        <div class="mb-4 text-center">
-          <label class="form-label fw-semibold d-block mb-2">Your Rating:</label>
-          <div class="star-rating mx-auto">
-            {% for i in "54321"|make_list %}
-            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" />
-            <label for="star{{ i }}" title="{{ i }} stars">★</label>
-            {% endfor %}
-          </div>
-        </div>
-
-        <div class="mb-4">
-          <label for="comment" class="form-label fw-semibold">Comment</label>
-          <textarea class="form-control shadow-sm rounded-3" id="comment" name="comment"
-                    rows="4" placeholder="Share your thoughts..."></textarea>
-        </div>
-
-        <div class="text-center">
-          <button type="submit" class="btn btn-submit px-4 py-2 rounded-3">Submit Review</button>
-        </div>
-      </form>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 RateUp | Built with ❤️ by Team</p>
+    <div>
+      <a href="/about/">About</a> |
+      <a href="/contact/">Contact</a> |
+      <a href="https://github.com/Qasemabualia-Axsos/Group-Project-repo" target="_blank">GitHub Repo</a>
     </div>
-  </div>
-  {% else %}
-    <p class="text-center">
-      <a href="{% url 'accounts:login_page' %}" class="text-primary fw-semibold">Log in</a> to leave a review.
-    </p>
-  {% endif %}
+    <div class="mt-3">
+      <a href="https://github.com/" target="_blank" class="social-icon"><i class="bi bi-github"></i></a>
+      <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
+      <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+    </div>
+  </footer>
 
-  
-  <h4 class="text-center text-primary fw-bold mb-4">All Reviews</h4>
-  <div class="row g-3" id="reviewsContainer">
-    {% include 'reviews/reviews_list.html' %}
-  </div>
-</div>
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("#reviewForm");
-  const reviewsContainer = document.querySelector("#reviewsContainer");
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  <script>
+    $('#searchInput').on('keyup', function () {
+      let query = $(this).val();
 
-  if (!form) return;
-
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const action = formData.get("review_id") ? "update" : "add";
-    formData.set("action", action);
-
-    fetch("", {
-      method: "POST",
-      headers: { "X-CSRFToken": csrftoken, "X-Requested-With": "XMLHttpRequest" },
-      body: formData,
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        reviewsContainer.innerHTML = data.html;
-        form.reset();
-        form.querySelector("input[name='review_id']").value = "";
-        alert(data.message);
-      } else {
-        alert(data.message);
+      if (query.length < 1) {
+        $('#searchResults').html('').hide();
+        return;
       }
-    });
-  });
 
-  // Handle Delete or Edit Review
-  reviewsContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("delete-review")) {
-      const reviewId = e.target.dataset.id;
-      const formData = new FormData();
-      formData.append("action", "delete");
-      formData.append("review_id", reviewId);
+      $('#searchResults').show();
 
-      fetch("", {
-        method: "POST",
-        headers: { "X-CSRFToken": csrftoken, "X-Requested-With": "XMLHttpRequest" },
-        body: formData,
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          reviewsContainer.innerHTML = data.html;
-          alert("Review deleted successfully!");
+      $.ajax({
+        url: "{% url 'movies:ajax_search_movies' %}",
+        data: { 'q': query },
+        dataType: 'json',
+        success: function (data) {
+          let html = '';
+          if (data.movies.length > 0) {
+            data.movies.forEach(function (movie) {
+              html += `
+              <div class="result-card">
+                <img src="${movie.cover}" alt="${movie.title}">
+                <a href="/view_movie/${movie.id}"><i class="bi bi-film"></i> ${movie.title}</a>
+              </div>`;
+            });
+          } else {
+            html = '<div class="text-center text-secondary p-2"><i class="bi bi-emoji-frown"></i> No results found.</div>';
+          }
+          $('#searchResults').html(html);
         }
       });
-    }
+    });
+  </script>
+</body>
 
-    if (e.target.classList.contains("edit-review")) {
-      const btn = e.target;
-      document.querySelector("input[name='review_id']").value = btn.dataset.id;
-      document.querySelector(`#star${btn.dataset.rating}`).checked = true;
-      document.querySelector("#comment").value = btn.dataset.comment;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  });
-});
-</script>
-
-<style>
-:root {
-  --primary: #0056b3;
-  --secondary: #f1c40f;
-  --bg-light: #f8f9fa;
-  --text-dark: #333333;
-}
-
-body {
-  background-color: var(--bg-light);
-}
-
-.card {
-  background-color: #ffffff;
-  border-radius: 15px;
-}
-.star-rating {
-  direction: rtl;
-  display: inline-flex;
-  gap: 5px;
-}
-.star-rating input {
-  display: none;
-}
-.star-rating label {
-  font-size: 2rem;
-  color: #ccc;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
-}
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  color: var(--secondary);
-}
-
-.btn-watch {
-  background: linear-gradient(135deg, var(--secondary) 0%, #ffde59 100%);
-  color: #333;
-  border: none;
-  font-weight: 600;
-  border-radius: 8px;
-  padding: 8px 16px;
-  transition: all 0.3s ease;
-}
-.btn-watch:hover {
-  background: linear-gradient(135deg, #ffcf00 0%, var(--secondary) 100%);
-  transform: translateY(-2px);
-}
-
-.btn-submit {
-  background: linear-gradient(135deg, var(--primary) 0%, #007bff 100%);
-  color: white;
-  font-weight: 600;
-  border: none;
-  transition: all 0.3s ease;
-}
-.btn-submit:hover {
-  background: linear-gradient(135deg, #003f87 0%, var(--primary) 100%);
-  transform: translateY(-2px);
-}
-
-.btn-action, .btn-delete {
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-weight: 600;
-  border: none;
-  transition: all 0.3s ease;
-}
-
-.btn-action {
-  background: linear-gradient(135deg, var(--primary) 0%, #007bff 100%);
-  color: white;
-  box-shadow: 0 2px 6px rgba(0, 91, 187, 0.3);
-}
-.btn-action:hover {
-  background: linear-gradient(135deg, #003f87 0%, #0056b3 100%);
-  transform: translateY(-2px);
-}
-
-.btn-delete {
-  background: linear-gradient(135deg, #ff5c5c 0%, #ff7878 100%);
-  color: white;
-  box-shadow: 0 2px 6px rgba(255, 90, 90, 0.3);
-}
-.btn-delete:hover {
-  background: linear-gradient(135deg, #e04a4a 0%, #ff5c5c 100%);
-  transform: translateY(-2px);
-}
-
-.review-card {
-  border-left: 5px solid var(--primary);
-  background-color: #ffffff;
-}
-.username {
-  color: var(--primary);
-  font-weight: 600;
-}
-.comment-text {
-  color: var(--text-dark);
-  font-size: 1rem;
-  line-height: 1.6;
-}
-</style>
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</html>

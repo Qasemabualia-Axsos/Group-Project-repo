@@ -1,28 +1,230 @@
-{% for review in reviews %}
-<div class="col-12">
-  <div class="p-4 rounded shadow-sm bg-white border review-card">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div>
-        <strong class="username">{{ review.user.first_name }} {{ review.user.last_name }}</strong><br>
-        <span class="rating-star text-warning fs-5">
-          {% for _ in "12345"|make_list %}
-            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
-          {% endfor %}
-        </span>
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .section-card {
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: radial-gradient(circle at top left, #111 0%, #0d0d0d 100%);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+  }
+
+  .section-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 200, 255, 0.25);
+  }
+
+  .avatar-glow {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffcc00, #ff8800);
+    color: #111;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(255, 200, 50, 0.6);
+  }
+
+  .rating-star i {
+    font-size: 1.1rem;
+    margin-right: 2px;
+  }
+
+  .review-actions .btn {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .form-control,
+  .form-select {
+    background: #111;
+    border: 1px solid rgba(0, 200, 255, 0.4);
+    color: #fff;
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 0 12px rgba(255, 200, 50, 0.5);
+    background: #0d0d0d;
+  }
+
+  .divider-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin: 3rem auto;
+    background: linear-gradient(135deg, #00c6ff, #ffcc00);
+    box-shadow: 0 0 20px rgba(255, 200, 50, 0.6);
+  }
+</style>
+
+<div class="container my-5">
+  <h2 class="text-warning mb-4"><i class="bi bi-chat-dots"></i> User Reviews</h2>
+
+  <div class="row g-4" id="review-list">
+    {% for review in reviews %}
+    <div class="col-12 col-md-6 review-item" id="review-{{ review.id }}">
+      <div class="section-card p-4 h-100">
+        <div class="d-flex align-items-center mb-3">
+          <div class="avatar-glow me-3">{{ review.user.first_name|slice:":1" }}{{ review.user.last_name|slice:":1" }}
+          </div>
+          <div>
+            <strong class="text-info">{{ review.user.first_name }} {{ review.user.last_name }}</strong><br>
+            <span class="rating-star text-warning">
+              {% for _ in "12345"|make_list %}
+              {% if forloop.counter <= review.rating %} <i class="bi bi-star-fill"></i>
+                {% else %}
+                <i class="bi bi-star"></i>
+                {% endif %}
+                {% endfor %}
+            </span>
+          </div>
+          <small class="ms-auto text-muted">{{ review.created_at|date:"M d, Y H:i" }}</small>
+        </div>
+
+        <p class="mb-3 text-light" id="comment-{{ review.id }}">{{ review.comment }}</p>
+
+        {% if review.user.id == request.session.userid %}
+        <div class="text-end review-actions">
+          <button class="btn btn-outline-info edit-review" data-id="{{ review.id }}" data-rating="{{ review.rating }}"
+            data-comment="{{ review.comment }}"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-outline-danger delete-review" data-id="{{ review.id }}"><i
+              class="bi bi-trash"></i></button>
+        </div>
+        {% endif %}
       </div>
-      <small class="text-muted">{{ review.created_at|date:"M d, Y H:i" }}</small>
     </div>
-    <p class="comment-text mb-2">{{ review.comment }}</p>
-    {% if review.user.id == request.session.userid %}
-    <div class="text-end">
-      <button class="btn btn-action edit-review me-2"
-              data-id="{{ review.id }}" data-rating="{{ review.rating }}"
-              data-comment="{{ review.comment }}">Edit</button>
-      <button class="btn btn-delete delete-review" data-id="{{ review.id }}">Delete</button>
+    {% empty %}
+    <div class="col-12">
+      <div class="section-card text-center p-5">
+        <i class="bi bi-chat-square-dots text-warning fs-1 mb-3"></i>
+        <p class="text-secondary">No reviews yet. Be the first to share your thoughts!</p>
+      </div>
     </div>
-    {% endif %}
+    {% endfor %}
   </div>
 </div>
-{% empty %}
-  <p class="text-center text-muted">No reviews yet. Be the first to review!</p>
-{% endfor %}
+
+<div class="divider-dot"></div>
+
+<!-- Add Review -->
+<div class="container my-5" id="review-form">
+  <div class="section-card p-5">
+    <h3 class="text-warning mb-4 text-center"><i class="bi bi-pencil-square"></i> Write a Review</h3>
+    <form method="post" action="{% url 'reviews:movie_reviews' movie.id %}" class="review-form">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="add"> <!-- ✅ tells view it's an add -->
+
+      <div class="mb-3">
+        <label class="form-label text-info">Your Rating</label>
+        <select name="rating" class="form-select shadow-sm">
+          <option value="5">⭐⭐⭐⭐⭐</option>
+          <option value="4">⭐⭐⭐⭐</option>
+          <option value="3">⭐⭐⭐</option>
+          <option value="2">⭐⭐</option>
+          <option value="1">⭐</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label text-info">Your Comment</label>
+        <textarea name="comment" rows="4" class="form-control shadow-sm"
+          placeholder="Share your thoughts about this movie..."></textarea>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-warning btn-lg shadow">
+          <i class="bi bi-send-fill"></i> Submit Review
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal for Editing -->
+<div class="modal fade" id="editReviewModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-light">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-warning">Edit Review</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editReviewForm">
+          {% csrf_token %}
+          <input type="hidden" name="review_id" id="edit-review-id">
+          <input type="hidden" name="action" value="update"> <!-- ✅ mark it update -->
+          <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <select name="rating" id="edit-review-rating" class="form-select bg-dark text-light border-info">
+              <option value="5">⭐⭐⭐⭐⭐</option>
+              <option value="4">⭐⭐⭐⭐</option>
+              <option value="3">⭐⭐⭐</option>
+              <option value="2">⭐⭐</option>
+              <option value="1">⭐</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Comment</label>
+            <textarea name="comment" id="edit-review-comment" rows="3"
+              class="form-control bg-dark text-light border-info"></textarea>
+          </div>
+          <button type="submit" class="btn btn-warning">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    // Delete Review
+    $(".delete-review").click(function () {
+      let id = $(this).data("id");
+      $.ajax({
+        url: "{% url 'reviews:movie_reviews' movie.id %}",
+        method: "POST",
+        data: {
+          "csrfmiddlewaretoken": "{{ csrf_token }}",
+          "action": "delete",
+          "review_id": id
+        },
+        success: function () {
+          $("#review-" + id).fadeOut();
+        }
+      });
+    });
+
+    // Open Edit Modal
+    $(".edit-review").click(function () {
+      $("#edit-review-id").val($(this).data("id"));
+      $("#edit-review-rating").val($(this).data("rating"));
+      $("#edit-review-comment").val($(this).data("comment"));
+      new bootstrap.Modal(document.getElementById("editReviewModal")).show();
+    });
+
+    // Submit Edit Review
+    $("#editReviewForm").submit(function (e) {
+      e.preventDefault();
+      let id = $("#edit-review-id").val();
+      $.ajax({
+        url: "{% url 'reviews:movie_reviews' movie.id %}",
+        method: "POST",
+        data: $(this).serialize(),
+        success: function () {
+          $("#comment-" + id).text($("#edit-review-comment").val());
+          bootstrap.Modal.getInstance(document.getElementById("editReviewModal")).hide();
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

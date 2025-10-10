@@ -1,16 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
 
+<style>
+    /* Section Cards */
+    .section-card {
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: radial-gradient(circle at top left, #111 0%, #0d0d0d 100%);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        transition: all 0.3s ease;
+    }
+
+    .section-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(0, 200, 255, 0.25);
+    }
+
+    /* Divider Dot */
+    .divider-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin: 3rem auto;
+        background: linear-gradient(135deg, #00c6ff, #ffcc00);
+        box-shadow: 0 0 20px rgba(255, 200, 50, 0.6);
+    }
+
+    /* Movie Card */
+    .movie-card {
+        transition: 0.3s ease;
+    }
+
+    .movie-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 193, 7, 0.3);
+    }
+
+    /* Avatar Glow for Actors/Directors */
+    .avatar-glow {
+        border-radius: 50%;
+        padding: 6px;
+        background: linear-gradient(135deg, #ffcc00, #00c6ff);
+        display: inline-block;
+        transition: 0.3s;
+    }
+
+    .avatar-glow img {
+        border-radius: 50%;
+        border: 3px solid #111;
+    }
+
+    .avatar-glow:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Carousel Overlay */
+    .carousel-caption {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.3));
+        border-radius: 15px;
+        padding: 20px;
+    }
+</style>
+
 <!-- Hero Banner -->
 <div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
     <div class="carousel-inner">
         {% for movie in featured_movies %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ movie.banner.url }}" class="d-block w-100" alt="{{ movie.title }}">
-            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded">
-                <h2 class="text-warning">{{ movie.title }}</h2>
-                <p>{{ movie.description|truncatechars:120 }}</p>
-                <a href="/movies/{{ movie.id }}/" class="btn btn-info">View Details</a>
+            <img src="{{ movie.cover_img.url }}" class="d-block w-100" alt="{{ movie.title }}">
+            <div class="carousel-caption d-none d-md-block">
+                <h2 class="text-warning fw-bold">{{ movie.title }}</h2>
+                <p class="text-light">{{ movie.description|truncatechars:120 }}</p>
+                <a href="{% url 'movies:view_movie' movie.id %}" class="btn btn-warning shadow">
+                    <i class="bi bi-info-circle"></i> View Details
+                </a>
             </div>
         </div>
         {% endfor %}
@@ -23,56 +87,65 @@
     </button>
 </div>
 
+<div class="divider-dot"></div>
+
 <!-- Featured Movies -->
-<section class="mb-5">
-    <h2 class="text-warning mb-3">Featured Movies</h2>
+<section class="mb-5 section-card p-4">
+    <h2 class="text-warning mb-3"><i class="bi bi-star-fill"></i> Featured Movies</h2>
     <div class="row g-4">
         {% for movie in featured_movies %}
         <div class="col-6 col-md-3">
-            <div class="card bg-dark border-info h-100">
-                <img src="{{ movie.poster.url }}" class="card-img-top" alt="{{ movie.title }}">
+            <div class="card bg-dark movie-card h-100 border-0">
+                <img src="{{ movie.cover_img.url }}" class="card-img-top" alt="{{ movie.title }}">
                 <div class="card-body">
                     <h5 class="card-title text-info">{{ movie.title }}</h5>
-                    <p class="card-text"><small class="text-secondary">{{ movie.release_year }}</small></p>
-                    <a href="/movies/{{ movie.id }}/" class="btn btn-warning btn-sm">View</a>
+                    <p class="card-text"><small class="text-secondary">{{ movie.release_date|date:"Y" }}</small></p>
+                    <a href="{% url 'movies:view_movie' movie.id %}" class="btn btn-outline-warning btn-sm">
+                        <i class="bi bi-play-circle"></i> View
+                    </a>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <p class="text-secondary">No featured movies yet.</p>
         {% endfor %}
     </div>
 </section>
+
+<div class="divider-dot"></div>
 
 <!-- Top Actors -->
-<section class="mb-5">
-    <h2 class="text-warning mb-3">Top Actors</h2>
+<section class="mb-5 section-card p-4">
+    <h2 class="text-warning mb-3"><i class="bi bi-people-fill"></i> Top Actors</h2>
     <div class="row g-3">
         {% for actor in top_actors %}
-        <div class="col-6 col-md-2">
-            <div class="card bg-dark border-info text-center h-100">
-                <img src="{{ actor.profile_img.url }}" class="card-img-top rounded-circle p-2" alt="{{ actor.name }}">
-                <div class="card-body">
-                    <h6 class="card-title text-info">{{ actor.name }}</h6>
-                </div>
+        <div class="col-6 col-md-2 text-center">
+            <div class="avatar-glow">
+                <img src="{{ actor.profile_img.url }}" class="img-fluid" alt="{{ actor.name }}">
             </div>
+            <h6 class="card-title text-info mt-2">{{ actor.name }}</h6>
         </div>
+        {% empty %}
+        <p class="text-secondary">No actors found.</p>
         {% endfor %}
     </div>
 </section>
 
+<div class="divider-dot"></div>
+
 <!-- Top Directors -->
-<section class="mb-5">
-    <h2 class="text-warning mb-3">Top Directors</h2>
+<section class="mb-5 section-card p-4">
+    <h2 class="text-warning mb-3"><i class="bi bi-camera-reels"></i> Top Directors</h2>
     <div class="row g-3">
         {% for director in top_directors %}
-        <div class="col-6 col-md-2">
-            <div class="card bg-dark border-warning text-center h-100">
-                <img src="{{ director.profile_img.url }}" class="card-img-top rounded-circle p-2"
-                    alt="{{ director.name }}">
-                <div class="card-body">
-                    <h6 class="card-title text-warning">{{ director.name }}</h6>
-                </div>
+        <div class="col-6 col-md-2 text-center">
+            <div class="avatar-glow">
+                <img src="{{ director.profile_img.url }}" class="img-fluid" alt="{{ director.name }}">
             </div>
+            <h6 class="card-title text-warning mt-2">{{ director.name }}</h6>
         </div>
+        {% empty %}
+        <p class="text-secondary">No directors found.</p>
         {% endfor %}
     </div>
 </section>
