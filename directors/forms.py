@@ -4,7 +4,7 @@ from .models import Director
 class DirectorForm(forms.ModelForm):
     class Meta:
         model = Director
-        fields = ["name", "bio", "profile_img", "movies"]
+        fields = ["name", "bio",]
 
     def __init__(self, *args, **kwargs):
         super(DirectorForm, self).__init__(*args, **kwargs)

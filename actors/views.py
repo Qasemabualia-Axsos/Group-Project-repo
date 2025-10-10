@@ -1,12 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from .models import Actor
 from .forms import ActorForm
 
-# List all actors
+# List all actors with search + pagination
 def actor_list(request):
-    actors = Actor.objects.all()
-    return render(request, "actors/actor_list.html", {"actors": actors})
+    q = (request.GET.get("q") or "").strip()
+    qs = Actor.objects.all().order_by("name")
+    if q:
+        qs = qs.filter(name__icontains=q)
+    paginator = Paginator(qs, 12)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    return render(request, "actors/actor_list.html", {"page_obj": page_obj, "q": q})
 
 # Actor detail
 def actor_detail(request, actor_id):
@@ -18,8 +24,8 @@ def actor_create(request):
     if request.method == "POST":
         form = ActorForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect("actors:actor_list")
+            actor = form.save()
+            return redirect("actors:actor_detail", actor_id=actor.id)
     else:
         form = ActorForm()
     return render(request, "actors/actor_form.html", {"form": form, "title": "Add Actor"})
@@ -48,3 +54,4 @@ def actor_delete(request, actor_id):
 def actor_api(request):
     actors = Actor.objects.all().values("id", "name", "bio", "profile_img")
     return JsonResponse(list(actors), safe=False)
+

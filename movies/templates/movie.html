@@ -49,7 +49,7 @@
             {% if movie.actors.all %}
             <p><strong>Actors:</strong>
                 {% for actor in movie.actors.all %}
-                <span class="badge bg-secondary">{{ actor.name }}</span>
+                <a href="{% url 'actors:actor_detail' actor.id%}"><span class="badge bg-secondary">{{ actor.name }}</span></a>
                 {% endfor %}
             </p>
             {% endif %}
@@ -57,7 +57,7 @@
             {% if movie.directors.all %}
             <p><strong>Directors:</strong>
                 {% for director in movie.directors.all %}
-                <span class="badge bg-info text-dark">{{ director.name }}</span>
+                <a href="{% url 'directors:director_detail' director.id%}"><span class="badge bg-info text-dark">{{ director.name }}</span></a>
                 {% endfor %}
             </p>
             {% endif %}
