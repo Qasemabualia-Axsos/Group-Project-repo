@@ -9,4 +9,6 @@ urlpatterns = [
     path('ajax-search/', views.ajax_search_movies, name='ajax_search_movies'),
     path('favorite/<int:movie_id>/', views.toggle_favorite, name='toggle_favorite'),
 
+    path('random_movie/', views.random_movie, name='random_movie'),
+
 ]

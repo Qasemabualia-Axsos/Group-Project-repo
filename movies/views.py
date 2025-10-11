@@ -9,6 +9,8 @@ from reviews.models import *
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Favorite
+import random
+
 API_KEY = "2cdda5a49ba08a74a18ca8712545b251"
 
 
@@ -101,3 +103,14 @@ def toggle_favorite(request, movie_id):
         favorite.delete()  # remove if already exists
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+
+def random_movie(request):
+    movies = Movies.objects.all()
+    if movies.exists():
+        random_movie = random.choice(movies)
+        return redirect('movies:view_movie', movie_id=random_movie.id)
+    else:
+        # If no movies exist, redirect to dashboard or show message
+        return redirect('movies:dashboard')
