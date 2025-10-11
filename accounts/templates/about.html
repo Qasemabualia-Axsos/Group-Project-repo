@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* 🌟 Cinematic Styles */
+    .section-card {
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: radial-gradient(circle at top left, #111 0%, #0d0d0d 100%);
+        transition: all 0.4s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .section-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(255, 200, 50, 0.3);
+    }
+
+    /* 🔹 Avatar Glow */
+    .avatar-glow {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #111;
+        margin: 0 auto 15px auto;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        transition: all 0.4s ease;
+    }
+
+    .avatar-glow:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 35px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Divider Dot */
+    .divider-dot {
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(135deg, #ffcc00, #ff8800);
+        border-radius: 50%;
+        margin: 3rem auto;
+        box-shadow: 0 0 15px rgba(255, 200, 50, 0.6);
+    }
+</style>
+
+<!-- 🌟 Hero Section -->
+<section class="py-5 text-center text-light my-5 section-card">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-warning mb-3">About RateUp</h1>
+        <p class="lead text-secondary col-md-8 mx-auto">
+            A platform crafted by passionate developers to redefine how movie fans connect with cinema.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{% url 'accounts:register_page' %}" class="btn btn-warning btn-lg shadow">
+                Get Started
+            </a>
+            <a href="{% url 'accounts:home' %}" class="btn btn-outline-info btn-lg shadow">
+                Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 📊 Stats Section -->
+<section class="py-5 text-light section-card">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3"><i class="bi bi-people-fill fs-1 text-warning"></i>
+                <h2 class="text-info mt-2">5K+</h2>
+                <p class="text-secondary">Active Users</p>
+            </div>
+            <div class="col-md-3"><i class="bi bi-film fs-1 text-warning"></i>
+                <h2 class="text-info mt-2">12K+</h2>
+                <p class="text-secondary">Movies Listed</p>
+            </div>
+            <div class="col-md-3"><i class="bi bi-star-fill fs-1 text-warning"></i>
+                <h2 class="text-info mt-2">45K+</h2>
+                <p class="text-secondary">Reviews</p>
+            </div>
+            <div class="col-md-3"><i class="bi bi-person-video3 fs-1 text-warning"></i>
+                <h2 class="text-info mt-2">2K+</h2>
+                <p class="text-secondary">Directors & Actors</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 🚀 Mission Section -->
+<section class="py-5 text-light section-card">
+    <div class="container text-center">
+        <h2 class="text-warning mb-4">Our Mission</h2>
+        <p class="text-secondary col-md-8 mx-auto">
+            At <span class="fw-bold text-info">RateUp</span>, we empower movie enthusiasts with the tools to
+            <span class="text-warning">explore, rate, and connect</span>.
+        </p>
+        <div class="row mt-5 g-4">
+            <div class="col-md-3">
+                <div class="p-4 bg-dark rounded hover-glow"><i class="bi bi-film fs-1 text-warning"></i>
+                    <h6 class="fw-bold text-info mt-3">Explore Movies</h6>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-dark rounded hover-glow"><i class="bi bi-star-fill fs-1 text-warning"></i>
+                    <h6 class="fw-bold text-info mt-3">Rate & Review</h6>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-dark rounded hover-glow"><i class="bi bi-people-fill fs-1 text-warning"></i>
+                    <h6 class="fw-bold text-info mt-3">Follow Actors</h6>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4 bg-dark rounded hover-glow"><i class="bi bi-collection-play fs-1 text-warning"></i>
+                    <h6 class="fw-bold text-info mt-3">Browse Categories</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 💡 Features Section -->
+<section class="py-5 text-light section-card">
+    <div class="container">
+        <h2 class="text-warning text-center mb-5">Why Choose RateUp?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card bg-black border-info h-100 text-center p-4 shadow-lg"><i
+                        class="bi bi-bar-chart-line fs-1 text-warning mb-3"></i>
+                    <h5 class="text-info">Data-Driven Insights</h5>
+                    <p class="text-secondary">Backed by analytics for transparency and trust.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-black border-warning h-100 text-center p-4 shadow-lg"><i
+                        class="bi bi-globe2 fs-1 text-warning mb-3"></i>
+                    <h5 class="text-info">Global Community</h5>
+                    <p class="text-secondary">Thousands of film lovers worldwide share reviews.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-black border-info h-100 text-center p-4 shadow-lg"><i
+                        class="bi bi-speedometer2 fs-1 text-warning mb-3"></i>
+                    <h5 class="text-info">Lightning Fast</h5>
+                    <p class="text-secondary">Optimized for speed and seamless experience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- ⏳ Timeline Section -->
+<section class="py-5 text-light section-card">
+    <div class="container">
+        <h2 class="text-warning text-center mb-5">Our Journey</h2>
+        <div class="row text-center g-4">
+            <div class="col-md-3"><i class="bi bi-lightbulb fs-1 text-warning"></i>
+                <h6 class="mt-2 text-info">Idea Born</h6>
+                <p class="small text-secondary">The spark was ignited.</p>
+            </div>
+            <div class="col-md-3"><i class="bi bi-code-slash fs-1 text-warning"></i>
+                <h6 class="mt-2 text-info">Development</h6>
+                <p class="small text-secondary">Sweat and creativity laid the foundation.</p>
+            </div>
+            <div class="col-md-3"><i class="bi bi-rocket-takeoff fs-1 text-warning"></i>
+                <h6 class="mt-2 text-info">Launch</h6>
+                <p class="small text-secondary">RateUp goes live worldwide.</p>
+            </div>
+            <div class="col-md-3"><i class="bi bi-award fs-1 text-warning"></i>
+                <h6 class="mt-2 text-info">Future Ahead</h6>
+                <p class="small text-secondary">25+ years of digital excellence ahead.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 👨‍💻 Team Section -->
+<section class="py-5 text-light section-card">
+    <div class="container">
+        <h2 class="text-warning text-center mb-5">Meet the Team</h2>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-3">
+                <div class="card bg-black text-center p-4 shadow-lg">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#ffcc00,#ff8800);"><i
+                            class="bi bi-person-fill"></i></div>
+                    <h6 class="text-info">Yacoub Qumsiyeh</h6>
+                    <p class="text-secondary">Full Stack Developer</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-black text-center p-4 shadow-lg">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#00c6ff,#0072ff);"><i
+                            class="bi bi-server"></i></div>
+                    <h6 class="text-info">Qasem Abualia</h6>
+                    <p class="text-secondary">Backend Developer</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-black text-center p-4 shadow-lg">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#f7971e,#ffd200);"><i
+                            class="bi bi-code-slash"></i></div>
+                    <h6 class="text-info">Mays Taha</h6>
+                    <p class="text-secondary">Frontend Developer</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-black text-center p-4 shadow-lg">
+                    <div class="avatar-glow" style="background: linear-gradient(135deg,#ff7eb3,#ff758c);"><i
+                            class="bi bi-palette"></i></div>
+                    <h6 class="text-info">Farah Akram</h6>
+                    <p class="text-secondary">UI/UX Designer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- ⚡ Tech Stack Section -->
+<section class="py-5 text-light section-card">
+    <div class="container text-center">
+        <h2 class="text-warning mb-4">Powered By</h2>
+        <div class="d-flex justify-content-center flex-wrap gap-5">
+            <i class="bi bi-bootstrap fs-1 text-info"></i>
+            <i class="bi bi-code-slash fs-1 text-warning"></i>
+            <i class="bi bi-database fs-1 text-info"></i>
+            <i class="bi bi-cloud fs-1 text-warning"></i>
+            <i class="bi bi-github fs-1 text-info"></i>
+        </div>
+    </div>
+</section>
+
+<div class="divider-dot"></div>
+
+<!-- 🚀 Call To Action -->
+<section class="py-5 text-center text-light my-5 section-card"
+    style="background: linear-gradient(135deg, #1a1a1a, #0d0d0d);">
+    <div class="container">
+        <h2 class="text-warning mb-3">Join RateUp Today</h2>
+        <p class="text-secondary">Be part of a growing community of movie lovers.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'accounts:register_page' %}" class="btn btn-warning btn-lg shadow"><i
+                    class="bi bi-box-arrow-in-right"></i> Sign Up Free</a>
+            <a href="{% url 'accounts:home' %}" class="btn btn-outline-info btn-lg shadow"><i
+                    class="bi bi-info-circle"></i> Learn More</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
