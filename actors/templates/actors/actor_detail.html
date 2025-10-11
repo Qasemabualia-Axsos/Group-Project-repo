@@ -1,30 +1,115 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block content %}
-<section class="person-hero">
-  <div class="person-avatar">
-    {% if actor.profile_img %}
-      <img src="{{ actor.profile_img.url }}" alt="{{ actor.name }}">
-    {% else %}
-      <img src="{% static 'people/person_placeholder.png' %}" alt="{{ actor.name }}">
-    {% endif %}
-  </div>
-  <div class="person-meta">
-    <h1 class="brand-gold">{{ actor.name }}</h1>
-    <p class="text-muted mb-2">Actor</p>
-    <p class="mb-0">{{ actor.bio|default:'—' }}</p>
-  </div>
-</section>
+<style>
+  /* ===== Page Theme ===== */
+  body {
+    background-color: #121212;
+    color: #eaeaea;
+    font-family: "Poppins", sans-serif;
+  }
 
-<section class="mt-4">
-  <h4 class="brand-gold mb-2">Known For</h4>
-  <ul class="list-unstyled small">
-    {% for movie in actor.movies.all %}
-      <li>• {{ movie.title }} {% if movie.release_year %}({{ movie.release_year }}){% endif %}</li>
-    {% empty %}
-      <li class="text-muted">No movies listed yet.</li>
-    {% endfor %}
-  </ul>
+  /* ===== Hero Section ===== */
+  .person-hero {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(32,32,32,0.9));
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    margin-top: 2rem;
+    gap: 2rem;
+  }
 
-</section>
+  .person-avatar img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f5c518; /* IMDb-style gold */
+    transition: transform 0.3s ease;
+  }
+
+  .person-avatar img:hover {
+    transform: scale(1.05);
+  }
+
+  .person-meta h1 {
+    color: #f5c518;
+    font-weight: 600;
+  }
+
+  .person-meta p {
+    font-size: 1rem;
+    color: #d1d1d1;
+  }
+
+  /* ===== Known For Section ===== */
+  section h4 {
+    color: #f5c518;
+    border-bottom: 2px solid rgba(245, 197, 24, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .list-unstyled li {
+    padding: 0.4rem 0;
+    font-size: 1rem;
+    color: #f0f0f0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .list-unstyled li:hover {
+    color: #f5c518;
+    transition: color 0.3s ease;
+  }
+
+  .text-muted {
+    color: #999 !important;
+  }
+
+  @media (max-width: 768px) {
+    .person-hero {
+      flex-direction: column;
+      text-align: center;
+    }
+    .person-avatar img {
+      width: 140px;
+      height: 140px;
+    }
+  }
+</style>
+
+<div class="container">
+  <!-- Actor Info Section -->
+  <section class="person-hero">
+    <div class="person-avatar">
+      {% if actor.profile_img %}
+        <img src="{{ actor.profile_img.url }}" alt="{{ actor.name }}">
+      {% else %}
+        <img src="{% static 'people/person_placeholder.png' %}" alt="{{ actor.name }}">
+      {% endif %}
+    </div>
+
+    <div class="person-meta">
+      <h1>{{ actor.name }}</h1>
+      <p class="text-muted mb-2">Actor</p>
+      <p class="mb-0">{{ actor.bio|default:'—' }}</p>
+    </div>
+  </section>
+
+  <!-- Known For Section -->
+  <section class="mt-5">
+    <h4>Known For</h4>
+    <ul class="list-unstyled">
+      {% for movie in actor.movies.all %}
+        <li>• {{ movie.title }} {% if movie.release_year %}({{ movie.release_year }}){% endif %}</li>
+      {% empty %}
+        <li class="text-muted">No movies listed yet.</li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
 {% endblock %}
