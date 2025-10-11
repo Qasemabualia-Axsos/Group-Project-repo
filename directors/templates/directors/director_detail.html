@@ -1,7 +1,141 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block content %}
-<section class="person-hero">
+<style>
+  /* ======= DIRECTOR PROFILE ======= */
+  .person-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2.5rem;
+    background: linear-gradient(135deg, #141414, #0f0f0f);
+    border: 1px solid #2c2c2c;
+    border-radius: 18px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 35px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .person-hero:hover {
+    transform: scale(1.01);
+    border-color: #ffc107;
+  }
+
+  .person-avatar img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%; /* ✅ Rounded profile image */
+    object-fit: cover;
+    border: 3px solid #ffc107;
+    box-shadow: 0 0 25px rgba(255, 193, 7, 0.25);
+    transition: all 0.3s ease;
+  }
+
+  .person-avatar img:hover {
+    transform: scale(1.05);
+  }
+
+  .person-meta {
+    flex: 1;
+    color: #eaeaea;
+  }
+
+  .person-meta h1 {
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: #ffc107;
+    margin-bottom: 0.4rem;
+  }
+
+  .person-role {
+    color: #ffc107;
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .person-meta p {
+    font-size: 1rem;
+    color: #cfcfcf;
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  /* ======= MOVIES SECTION ======= */
+  .movies-section {
+    margin-top: 3.5rem;
+    padding: 2.5rem;
+    background: #101010;
+    border-radius: 18px;
+    border: 1px solid #222;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+  }
+
+  .movies-section h4 {
+    color: #ffc107;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #2c2c2c;
+    padding-bottom: 0.5rem;
+  }
+
+  .movie-list {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .movie-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #181818;
+    padding: 14px 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #2c2c2c;
+    transition: all 0.25s ease;
+    color: #f1f1f1;
+    font-size: 1rem;
+  }
+
+  .movie-list li:hover {
+    border-color: #ffc107;
+    background-color: #1f1f1f;
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(255, 193, 7, 0.2);
+  }
+
+  .movie-year {
+    color: #999;
+    font-size: 0.9rem;
+  }
+
+  /* ======= RESPONSIVE ======= */
+  @media (max-width: 768px) {
+    .person-hero {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .person-meta h1 {
+      font-size: 1.9rem;
+    }
+
+    .person-avatar img {
+      width: 140px;
+      height: 140px;
+    }
+
+    .movies-section {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<!-- ======= DIRECTOR PROFILE ======= -->
+<section class="person-hero mt-4">
   <div class="person-avatar">
     {% if director.profile_img %}
       <img src="{{ director.profile_img.url }}" alt="{{ director.name }}">
@@ -9,22 +143,31 @@
       <img src="{% static 'people/person_placeholder.png' %}" alt="{{ director.name }}">
     {% endif %}
   </div>
+
   <div class="person-meta">
-    <h1 class="brand-gold">{{ director.name }}</h1>
-    <p class="text-muted mb-2">Director</p>
-    <p class="mb-0">{{ director.bio|default:'—' }}</p>
+    <h1>{{ director.name }}</h1>
+    <p class="person-role">🎬 Director</p>
+    <p>{{ director.bio|default:"No biography available for this director." }}</p>
   </div>
 </section>
 
-<section class="mt-4">
-  <h4 class="brand-gold mb-2">Directed Movies</h4>
-  <ul class="list-unstyled small">
+<!-- ======= MOVIES ======= -->
+<section class="movies-section">
+  <h4>Directed Movies</h4>
+  <ul class="movie-list">
     {% for movie in director.movies.all %}
-      <li>• {{ movie.title }} {% if movie.release_year %}({{ movie.release_year }}){% endif %}</li>
+      <li>
+        <span>{{ movie.title }}</span>
+        {% if movie.release_year %}
+          <span class="movie-year">({{ movie.release_year }})</span>
+        {% endif %}
+      </li>
     {% empty %}
       <li class="text-muted">No movies listed yet.</li>
     {% endfor %}
   </ul>
-
 </section>
 {% endblock %}
+
+
+
