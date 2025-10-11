@@ -163,3 +163,10 @@ def delete_profile(request):
         request.session.flush()  # clear session
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "failed", "message": "Invalid request"})
+
+
+def about(request):
+    return render (request,'about.html')
+
+def contact(request):
+    return render (request,'contact.html')
